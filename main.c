@@ -15,10 +15,11 @@
 int main(void) 
 {
 	char *rl;
-	s_node *head = NULL;
+	s_node *head;
 	head = (s_node *)malloc(sizeof(s_node));
 	if (!head)
 		return 1;
+	printf("Head: %s\n", head->val.value);
 	while (1) {
 		rl = readline("Prompt > ");
 		scanInput(rl, head);

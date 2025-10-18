@@ -19,15 +19,15 @@
 #include <readline/history.h>
 
 typedef enum {
-	ASSIGNMENT,
-	COMMAND,
-	OPTION,
-	PIPE,
-	ARGUMENT,
-	IN_REDIR,
-	OUT_REDIR,
-	DEL_IN_REDIR,
-	APP_MOD_OUT_REDIR
+	ASSIGNMENT = 1,
+	COMMAND = 2,
+	OPTION = 3,
+	PIPE = 5,
+	ARGUMENT = 4,
+	IN_REDIR = 6,
+	OUT_REDIR = 7,
+	DEL_IN_REDIR = 8,
+	APP_MOD_OUT_REDIR = 9
 } TokenType;
 
 typedef struct {

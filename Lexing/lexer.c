@@ -39,11 +39,30 @@ void omitWhiteSpaces(char *str, int *i) {
 		(*i)++;
 }
 
+void add_node(s_node* list, Token *newToken) {
+	s_node *newNode;
+	s_node *tail;
+
+	tail = list;
+	while (tail->next != NULL)
+		tail = tail->next;
+	if (list->val.value == NULL) {
+		list->val = *newToken;
+	}
+	else {
+		newNode = (s_node *)malloc(sizeof(s_node));
+		if (!newNode)
+			return;
+		newNode->val = *newToken;
+		newNode->next = NULL;
+		tail->next = newNode;
+	}
+}
+
 int command_or_assignment(char* input, s_node *list, int start)
 {
 	int i = start;
 	Token newToken;
-	s_node newNode;
 	newToken.type = COMMAND;
 	while (input[i] && isWhiteSpace(input[i]) != 1) {
 		if (input[i] == '=')
@@ -51,51 +70,73 @@ int command_or_assignment(char* input, s_node *list, int start)
 		i++;
 	}
 	newToken.value = ft_substr(input, start - 1, i - start + 2);
-	newNode.val = newToken;
-	newNode.next = NULL;
-	*list = newNode;
-	printf("Word: %s\n", newToken.value);
+	add_node(list, &newToken);
 	return i - start;
 }
 
 int option(char* input, s_node *list, int start) {
 	int i = start;
 	Token newToken;
-	s_node newNode;
 	while(input[i] && isWhiteSpace(input[i]) != 1)
 		i++;
 	newToken.type = OPTION;
 	newToken.value = ft_substr(input, start - 1, i - start + 2);
-	newNode.val = newToken;
-	list->next = &newNode;
-	newNode.next = NULL;
-	printf("Option: %s\n", newToken.value);
+	add_node(list, &newToken);
+	return i - start;
+}
+
+int argument(char* input, s_node* list, int start) {
+	int i = start;
+	Token newToken;
+	if (start == 34) {
+
+	}
+	else if (start == 39) {
+
+	}
+	else {
+		while (input[i] && isWhiteSpace(input[i]) != 1)
+			i++;
+	}
+	newToken.value = ft_substr(input, start - 1, i - start + 2);
+	newToken.type = ARGUMENT;
+	add_node(list, &newToken);
 	return i - start;
 }
 
 void scanInput(char* input, s_node *head)
 {
-	//const char *operators[] = {">>", "<<", ">", "<", "|"};
+	//const char *operators[] = {">>", "<<", "> ", "< ", "| "};
 	int i = 0;
 	int isQuoted = 0;
 	int commandExist = 0;
-	while (input[i]) {
+	while (input[i]) { 
 		if (!isQuoted && isWhiteSpace(input[i]))
 			omitWhiteSpaces(input, &i);
-		else if (!commandExist && ((input[i] >= 65 && input[i] <= 90) || 
+		if (((input[i] >= 65 && input[i] <= 90) || 
 		(input[i] >= 97 && input[i] <= 122))) {
-			i += command_or_assignment(input, head, i);
-			commandExist = 1;
+			if (!commandExist) {
+				i += command_or_assignment(input, head, i);
+				commandExist = 1;
+			}
+			else
+			 	i += argument(input, head, i);
 		}
-		else if (!isQuoted && input[i] == 45)
+		if (!isQuoted && input[i] == 45)
 		 	i += option(input, head, i);
-		//if input[i] is operator
-		
+		if (input[i] == 60 || input[i] == 62 || input[i] == 124) {
+			commandExist = 0;
+		}
 		// else if (input[i] == 34)
 		// 	isQuoted = (isQuoted == -1) ? 1 : -1;
 		// else if (input[i] == 39)
 		// 	isQuoted = (isQuoted == -1) ? 2 : -1;
 		i++;
+	}
+	while(head != NULL)
+	{
+		printf("Token %d: %s\n",(int)head->val.type, head->val.value);
+		head = head->next;
 	}
 	printf("%s\n", input);
 }
