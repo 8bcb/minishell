@@ -14,10 +14,12 @@
 #define MINISHELL_H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
-enum TokenType {
+typedef enum {
+	ASSIGNMENT,
 	COMMAND,
 	OPTION,
 	PIPE,
@@ -26,8 +28,21 @@ enum TokenType {
 	OUT_REDIR,
 	DEL_IN_REDIR,
 	APP_MOD_OUT_REDIR
-};
+} TokenType;
 
-void scanInput(char* input);
+typedef struct {
+	TokenType type;
+	char *value;
+	int line;
+} Token;
+
+typedef struct s_node{
+	Token val;
+	struct s_node *next;
+} s_node;
+
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*strjoin(char const *s1, char const *s2);
+void scanInput(char* input, s_node *llist);
 
 #endif

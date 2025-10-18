@@ -15,9 +15,13 @@
 int main(void) 
 {
 	char *rl;
+	s_node *head = NULL;
+	head = (s_node *)malloc(sizeof(s_node));
+	if (!head)
+		return 1;
 	while (1) {
 		rl = readline("Prompt > ");
-		scanInput(rl);
+		scanInput(rl, head);
 		//parseInput
 		//execute
 	}

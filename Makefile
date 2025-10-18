@@ -1,6 +1,7 @@
-NAME := minishell
+NAME := mini
 SRC := main.c \
-lexer.c
+Lexing/lexer.c \
+Lexing/utils.c
 OBJ = $(SRC:.c=.o)
 CC = cc
 CFLAGS := -Wall -Wextra -Werror
