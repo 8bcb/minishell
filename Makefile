@@ -1,27 +1,35 @@
 NAME := minishell
 SRC := main.c \
 Lexing/lexer.c \
-execution/exec_ast.c execution/exec.h \
-utils/ft_strcmp.c \
-builtins/echo.c
+execution/exec_ast.c execution/exec_command.c execution/exec_builtin.c \
+execution/builtins/echo.c
 
 OBJ = $(SRC:.c=.o)
 CC = cc
 CFLAGS := -Wall -Wextra -Werror
-LDFLAGS := -lreadline
+LDLIBS := -lreadline -lft
+INCLUDES    := -I . -I libft
 
-all: $(NAME)
+LIBFT_DIR   := libft
+LIBFT_A     := $(LIBFT_DIR)/libft.a
 
-$(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+all: $(LIBFT_A) $(NAME)
+
+$(NAME): $(OBJ) $(LIBFT_A)
+	$(CC) $(CFLAGS) $(OBJ) -L$(LIBFT_DIR) $(LDLIBS) -o $@
 
 %.o: %.c minishell.h
-	$(CC) $(CFLAGS) -I . -o $@ -c $<
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+$(LIBFT_A):
+	$(MAKE) -C $(LIBFT_DIR)
 
 clean:
 	rm -f $(OBJ)
+	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
