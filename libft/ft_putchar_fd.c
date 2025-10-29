@@ -1,16 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.h                                         :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/28 07:54:28 by asia              #+#    #+#             */
-/*   Updated: 2025/10/29 09:45:51 by asia             ###   ########.fr       */
+/*   Created: 2025/01/12 20:22:49 by jziola            #+#    #+#             */
+/*   Updated: 2025/01/12 21:46:58 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../exec.h"
+#include "libft.h"
 
-int builtin_echo(char **argv);
-int is_new_line(char *str);
+void	ft_putchar_fd(char c, int fd)
+{
+	write(fd, &c, 1);
+}

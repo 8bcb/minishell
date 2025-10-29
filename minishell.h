@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 10:43:05 by pkosciel          #+#    #+#             */
-/*   Updated: 2025/10/28 07:26:22 by asia             ###   ########.fr       */
+/*   Updated: 2025/10/29 09:46:52 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <unistd.h>
+// TODO: remove
+#include <stdio.h>
+#include "libft.h"
 
 typedef enum e_node_type {
 	NODE_COMMAND,

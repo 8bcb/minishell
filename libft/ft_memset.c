@@ -1,16 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.h                                         :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/28 07:54:28 by asia              #+#    #+#             */
-/*   Updated: 2025/10/29 09:45:51 by asia             ###   ########.fr       */
+/*   Created: 2024/12/29 15:19:52 by jziola            #+#    #+#             */
+/*   Updated: 2025/01/12 21:15:09 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../exec.h"
+#include "libft.h"
 
-int builtin_echo(char **argv);
-int is_new_line(char *str);
+void	*ft_memset(void *s, int c, size_t n)
+{
+	size_t	i;
+
+	if (!s)
+		return (NULL);
+	i = 0;
+	while (i < n)
+	{
+		*(unsigned char *)(s + i) = (unsigned char)c;
+		i++;
+	}
+	return (s);
+}

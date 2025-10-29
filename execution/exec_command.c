@@ -11,11 +11,12 @@ int exec_command(t_ast *cmd, t_env *env)
     {
         return exec_builtin(cmd, env);
     }
+    return 0;
 }
 
 int    is_builtin(char *cmd_name)
 {
-    if (ft_strcmp(cmd_name, "echo") == 0)
+    if (ft_strncmp(cmd_name, "echo", sizeof("echo")) == 0)
     {
         return 1;
     }

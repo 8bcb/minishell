@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_ast.c                                         :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/28 06:54:16 by asia              #+#    #+#             */
-/*   Updated: 2025/10/29 08:27:07 by asia             ###   ########.fr       */
+/*   Created: 2025/01/12 11:56:11 by jziola            #+#    #+#             */
+/*   Updated: 2025/01/12 15:47:11 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./exec.h"
+#include "libft.h"
 
-int exec_ast(t_ast *node, t_env *env)
+size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 {
-    if (!node)
-    {
-        return 0;
-    }
+	size_t	i;
 
-    if (node -> type == NODE_COMMAND)
-    {
-        return exec_command(node, env);
-    }
-    return 1;
+	i = 0;
+	if (size > 0)
+	{
+		while (src[i] != '\0' && i < (size - 1))
+		{
+			dest[i] = src[i];
+			i++;
+		}
+		dest[i] = '\0';
+	}
+	return (ft_strlen(src));
 }

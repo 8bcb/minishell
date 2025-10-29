@@ -1,16 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.h                                         :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/28 07:54:28 by asia              #+#    #+#             */
-/*   Updated: 2025/10/29 09:45:51 by asia             ###   ########.fr       */
+/*   Created: 2024/12/29 15:03:04 by jziola            #+#    #+#             */
+/*   Updated: 2024/12/29 15:58:53 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../exec.h"
+#include "libft.h"
 
-int builtin_echo(char **argv);
-int is_new_line(char *str);
+size_t	ft_strlen(const char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		i++;
+	}
+	return (i);
+}
