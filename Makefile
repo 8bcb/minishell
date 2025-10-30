@@ -8,7 +8,7 @@ OBJ = $(SRC:.c=.o)
 CC = cc
 CFLAGS := -Wall -Wextra -Werror
 LDLIBS := -lreadline -lft
-INCLUDES    := -I . -I libft
+INCLUDES := -I . -I libft
 
 LIBFT_DIR   := libft
 LIBFT_A     := $(LIBFT_DIR)/libft.a
