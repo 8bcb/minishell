@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 08:40:14 by pkosciel          #+#    #+#             */
-/*   Updated: 2025/10/30 08:21:07 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/04 09:47:05 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,25 @@ int free_node(t_ast *n)
 
 int main(void) 
 {
-	char *rl;
+	char	*rl;
+	int		exit_status;
+	
 	while (1) {
-		rl = readline("Prompt > ");
+		char prompt_buf[64];
+        // Show status in the prompt when interactive; stay silent when piped
+        if (isatty(STDIN_FILENO))
+            snprintf(prompt_buf, sizeof(prompt_buf), "minishell[%d]> ", exit_status);
+        else
+            prompt_buf[0] = '\0';
+		rl = readline(prompt_buf);
 		if (!rl) break;
 		if (*rl) add_history(rl);
 		char **argv = ft_split(rl, ' ');
 		if (argv && argv[0])
 		{
 			t_ast *node = mock_node(argv);
-			exec_ast(node, NULL);
+			exit_status = exec_ast(node, NULL);
+			(void)exit_status;
 			free_node(node);
 		}
 		else
