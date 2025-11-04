@@ -8,10 +8,9 @@ int exec_command(t_ast *cmd, t_env *env)
     }
 
     if (is_builtin(cmd -> argv[0]) == 1)
-    {
         return exec_builtin(cmd, env);
-    }
-    return 0;
+
+    return exec_external(cmd->argv, env);
 }
 
 int    is_builtin(char *cmd_name)

@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 08:07:36 by asia              #+#    #+#             */
-/*   Updated: 2025/10/29 10:01:44 by asia             ###   ########.fr       */
+/*   Updated: 2025/10/30 08:48:27 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int exec_builtin(t_ast *cmd, t_env *env)
     (void)env;
     if (ft_strncmp(name, "echo", sizeof("echo")) == 0)
     {
-        builtin_echo(cmd->argv);
+        return builtin_echo(cmd->argv);
     }
     return 1;
 }

@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 06:54:16 by asia              #+#    #+#             */
-/*   Updated: 2025/10/29 08:27:07 by asia             ###   ########.fr       */
+/*   Updated: 2025/10/30 08:39:25 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,9 @@
 int exec_ast(t_ast *node, t_env *env)
 {
     if (!node)
-    {
         return 0;
-    }
 
     if (node -> type == NODE_COMMAND)
-    {
         return exec_command(node, env);
-    }
     return 1;
 }
