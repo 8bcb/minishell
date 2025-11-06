@@ -1,8 +1,8 @@
 NAME := minishell
 SRC := main.c \
 Lexing/lexer.c \
-execution/exec_ast.c execution/exec_command.c execution/exec_builtin.c execution/exec_external.c execution/exec_external_utils.c \
-execution/builtins/echo.c
+execution/exec_ast.c execution/exec_command.c execution/exec_external.c execution/exec_external_utils.c \
+execution/builtins/echo.c execution/builtins/exec_builtin.c
 
 OBJ = $(SRC:.c=.o)
 CC = cc

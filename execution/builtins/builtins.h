@@ -6,16 +6,28 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 07:54:28 by asia              #+#    #+#             */
-/*   Updated: 2025/11/04 09:07:34 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/06 09:56:32 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-#include "../exec.h"
 
-int builtin_echo(char **argv);
-int is_new_line(char *str);
+typedef struct s_env t_env;
+
+typedef int (*t_builtin_fn)(char **argv, t_env *env);
+
+typedef struct s_builtin {
+    const char      *name;
+    t_builtin_fn    fn;
+    int             must_run_in_parent;
+} t_builtin;
+
+const t_builtin     *builtin_lookup(const char *name);
+int                 exec_builtin(char **argv, t_env *env);
+
+int             builtin_echo(char **argv, t_env *env);
+int             is_new_line(char *str);
 
 #endif
