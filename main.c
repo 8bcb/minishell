@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 08:40:14 by pkosciel          #+#    #+#             */
-/*   Updated: 2025/11/04 09:47:05 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/05 07:49:32 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,5 @@ int main(void)
 		//parseInput
 		//execute
 	}
-	return 0;
+	return exit_status;
 }

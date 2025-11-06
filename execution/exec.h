@@ -8,9 +8,6 @@ int exec_ast(t_ast *node, t_env *env);
 
 int exec_command(t_ast *cmd, t_env *env);
 
-int exec_builtin(t_ast *cmd, t_env *env);
-int is_builtin(char *cmd_name);
-
 int     exec_external(char **argv, t_env *env);
 int     spawn_execve(const char *path, char **argv);
 char    *resolve_in_path(char *command);

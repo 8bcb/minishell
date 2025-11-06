@@ -6,17 +6,20 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 07:59:23 by asia              #+#    #+#             */
-/*   Updated: 2025/10/30 08:49:53 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/06 09:59:37 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./builtins.h"
+#include "libft.h"
+#include "unistd.h"
 
-int builtin_echo(char **argv)
+int builtin_echo(char **argv, t_env *env)
 {
     int i;
     int print_newline;
     int str_len;
+    (void)env;
     
     i = 1;
     print_newline = 1;
