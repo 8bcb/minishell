@@ -69,7 +69,7 @@ int command_or_assignment(char* input, s_node *list, int start)
 			newToken.type = ASSIGNMENT;
 		i++;
 	}
-	newToken.value = ft_substr(input, start - 1, i - start + 2);
+	newToken.value = ft_substr(input, start, i - start + 2);
 	add_node(list, &newToken);
 	return i - start;
 }
@@ -111,26 +111,29 @@ void scanInput(char* input, s_node *head)
 	int isQuoted = 0;
 	int commandExist = 0;
 	while (input[i]) { 
-		if (!isQuoted && isWhiteSpace(input[i]))
+		if (isQuoted == 0 && isWhiteSpace(input[i]))
 			omitWhiteSpaces(input, &i);
-		if (((input[i] >= 65 && input[i] <= 90) || 
-		(input[i] >= 97 && input[i] <= 122))) {
-			if (!commandExist) {
+		if ((input[i] >= 65 && input[i] <= 90) || 
+		(input[i] >= 97 && input[i] <= 122)) {
+			if (commandExist == 0) {
 				i += command_or_assignment(input, head, i);
 				commandExist = 1;
 			}
 			else
 			 	i += argument(input, head, i);
 		}
-		if (!isQuoted && input[i] == 45)
+		if (isQuoted == 0 && input[i] == 45)
 		 	i += option(input, head, i);
-		if (input[i] == 60 || input[i] == 62 || input[i] == 124) {
-			commandExist = 0;
-		}
-		// else if (input[i] == 34)
-		// 	isQuoted = (isQuoted == -1) ? 1 : -1;
-		// else if (input[i] == 39)
-		// 	isQuoted = (isQuoted == -1) ? 2 : -1;
+		//if (input[i] == 60 || input[i] == 62 || input[i] == 124) {
+			//commandExist = 0;
+		//}
+		//else if (input[i] == 34 || input[i] == 39)
+		// {
+		// 	int open = input[i];
+		// 	i += argument(input, head, i);
+		// 	if (input[i] != open)
+		// 		error_unclosed_quotes();
+		// }
 		i++;
 	}
 	while(head != NULL)
@@ -138,6 +141,5 @@ void scanInput(char* input, s_node *head)
 		printf("Token %d: %s\n",(int)head->val.type, head->val.value);
 		head = head->next;
 	}
-	printf("%s\n", input);
 }
 
