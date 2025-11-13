@@ -6,11 +6,11 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 08:33:09 by asia              #+#    #+#             */
-/*   Updated: 2025/11/04 08:46:17 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/13 10:20:11 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
+#include "../exec.h"
 
 void    free_split(char **split_array)
 {
