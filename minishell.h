@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 10:43:05 by pkosciel          #+#    #+#             */
-/*   Updated: 2025/11/03 08:07:49 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/10 09:15:43 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include "libft.h"
 #include <errno.h>
 #include <string.h>
+#include <fcntl.h>
 
 typedef enum e_node_type {
 	NODE_COMMAND,

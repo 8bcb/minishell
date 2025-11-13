@@ -6,40 +6,71 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 09:03:55 by asia              #+#    #+#             */
-/*   Updated: 2025/11/04 08:47:08 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/13 10:38:14 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./exec.h"
+#include "../exec.h"
+#include "../redirection/exec_redirection.h"
+#include "./exec_external.h"
 
 extern char **environ;
 
-int exec_external(char **argv, t_env *env)
+int     spawn_execve_with_redirs(const char *path, char **argv, const char *infile, 
+    const char *outfile, int append)
+{
+    pid_t   pid;
+    int     status;
+    
+    pid = fork();
+    if (pid < 0)
+    {
+        print_cmd_error(argv[0], strerror(errno));
+        return 1;
+    }
+    if (pid == 0)
+    {
+        if (apply_redirection(infile, outfile, append) != 0)
+            _exit(1);
+        execve(path, argv, environ);
+        if (errno == ENOENT)
+            _exit(127);
+        if (errno == EACCES || errno == ENOTDIR || errno == EISDIR)
+            _exit(126);
+        _exit(126);
+    }
+    waitpid(pid, &status, 0);
+    return status_from_wait(status);
+}
+
+int exec_external(t_ast *cmd, t_env *env)
 {
     (void)env;
     int     child_process_status;
     char    *path;
 
-    if (!argv || !argv[0] || !*argv[0])
+    if (!cmd || !cmd->argv || !cmd->argv[0])
         return 0;
-    if (contains_slash(argv[0]))
+    if (contains_slash(cmd->argv[0]))
     {
-        child_process_status = spawn_execve(argv[0], argv);
+        child_process_status = spawn_execve_with_redirs(cmd->argv[0], cmd->argv, get_last_file(cmd->infile), 
+        get_last_file(cmd->outfile), cmd->append);
         if (child_process_status == 127)
-            print_cmd_error(argv[0], strerror(ENOENT));
+            print_cmd_error(cmd->argv[0], strerror(ENOENT));
         if (child_process_status == 126)
-            print_cmd_error(argv[0], strerror(EACCES));
+            print_cmd_error(cmd->argv[0], strerror(EACCES));
         return child_process_status;
     }
-    path = resolve_in_path(argv[0]);
+    path = resolve_in_path(cmd->argv[0]);
     if (!path)
     {
-        print_cmd_error(argv[0], "command not found");
+        print_cmd_error(cmd->argv[0], "command not found");
         return 127;
     }
-    child_process_status = spawn_execve(path, argv);
+    child_process_status = spawn_execve_with_redirs(path, cmd->argv, get_last_file(cmd->infile), 
+        get_last_file(cmd->outfile), cmd->append);
     if (child_process_status == 126)
-            print_cmd_error(argv[0], strerror(EACCES));
+            print_cmd_error(cmd->argv[0], strerror(EACCES));
     free(path);
     return child_process_status;
 }

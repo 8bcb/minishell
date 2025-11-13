@@ -6,13 +6,12 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 07:54:28 by asia              #+#    #+#             */
-/*   Updated: 2025/11/06 09:56:32 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/13 09:19:54 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
-
 
 typedef struct s_env t_env;
 
