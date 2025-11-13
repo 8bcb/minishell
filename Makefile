@@ -1,7 +1,9 @@
 NAME := mini
 SRC := main.c \
 Lexing/lexer.c \
-Lexing/utils.c
+Lexing/utils.c \
+Lexing/linked_list.c \
+Lexing/tokens.c
 OBJ = $(SRC:.c=.o)
 CC = cc
 CFLAGS := -Wall -Wextra -Werror

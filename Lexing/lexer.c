@@ -10,130 +10,67 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-int isWhiteSpace(char c) {
-	if ((c >= 9 && c <= 13) || c == 32)
-		return 1;
-	return 0;
-}
-
-int countWords(char *str) {
-	int counter = 0;
-	int i = 0;
-	int isQuoted = -1;
-	while (str[i] && str[i] <= 32)
-		i++;
-	while (str[i + 1]) {
-		if (str[i] ==  34 || str[i] == 39)
-			isQuoted = (isQuoted == -1) ? 1 : -1;
-		else if (isWhiteSpace(str[i]) == 1 && isWhiteSpace(str[i + 1]) == 0 && isQuoted == -1)
-			counter++;
-		i++;
-	}
-	return counter + 1;
-}
-
-void omitWhiteSpaces(char *str, int *i) {
-	while (isWhiteSpace(str[*i]) == 1)
-		(*i)++;
-}
-
-void add_node(s_node* list, Token *newToken) {
-	s_node *newNode;
-	s_node *tail;
-
-	tail = list;
-	while (tail->next != NULL)
-		tail = tail->next;
-	if (list->val.value == NULL) {
-		list->val = *newToken;
-	}
-	else {
-		newNode = (s_node *)malloc(sizeof(s_node));
-		if (!newNode)
-			return;
-		newNode->val = *newToken;
-		newNode->next = NULL;
-		tail->next = newNode;
-	}
-}
-
-int command_or_assignment(char* input, s_node *list, int start)
+int isValidAssignment(char *str) 
 {
-	int i = start;
-	Token newToken;
-	newToken.type = COMMAND;
-	while (input[i] && isWhiteSpace(input[i]) != 1) {
-		if (input[i] == '=')
-			newToken.type = ASSIGNMENT;
+	int i;
+	int hasEqualsSign;
+	int openQuote;
+
+	i = 0;
+	hasEqualsSign = 0;
+	openQuote = 0;
+	if (isAlphanumeric(str[i]) == 1 && (str[i] >= 48 && str[i] <= 57))
+		return 0;
+	while (str[i]) 
+	{
+		if (openQuote == 0 && str[i] == '=')
+			hasEqualsSign++;
+		else if (str[i] == 34 || str[i] == 39)
+			openQuote = (openQuote == 0 ? str[i] : 0);
+		else if (openQuote == 0 && (isWhiteSpace(str[i]) == 1
+			|| isAlphanumeric(str[i]) == 0))
+			return 0;
 		i++;
 	}
-	newToken.value = ft_substr(input, start, i - start + 2);
-	add_node(list, &newToken);
-	return i - start;
+	return (hasEqualsSign == 1 && openQuote == 0) ? 1 : 0;
 }
 
-int option(char* input, s_node *list, int start) {
-	int i = start;
+void t_assignment(char* str, s_node* head)
+{
 	Token newToken;
-	while(input[i] && isWhiteSpace(input[i]) != 1)
-		i++;
-	newToken.type = OPTION;
-	newToken.value = ft_substr(input, start - 1, i - start + 2);
-	add_node(list, &newToken);
-	return i - start;
-}
 
-int argument(char* input, s_node* list, int start) {
-	int i = start;
-	Token newToken;
-	if (start == 34) {
-
-	}
-	else if (start == 39) {
-
-	}
-	else {
-		while (input[i] && isWhiteSpace(input[i]) != 1)
-			i++;
-	}
-	newToken.value = ft_substr(input, start - 1, i - start + 2);
-	newToken.type = ARGUMENT;
-	add_node(list, &newToken);
-	return i - start;
+	newToken.type = ASSIGNMENT;
+	newToken.value = str;
+	add_node(head, &newToken);
 }
 
 void scanInput(char* input, s_node *head)
 {
-	//const char *operators[] = {">>", "<<", "> ", "< ", "| "};
 	int i = 0;
-	int isQuoted = 0;
 	int commandExist = 0;
-	while (input[i]) { 
-		if (isQuoted == 0 && isWhiteSpace(input[i]))
-			omitWhiteSpaces(input, &i);
-		if ((input[i] >= 65 && input[i] <= 90) || 
-		(input[i] >= 97 && input[i] <= 122)) {
-			if (commandExist == 0) {
-				i += command_or_assignment(input, head, i);
-				commandExist = 1;
-			}
+	char* trimmed;
+
+	trimmed = trim(input);
+	if (isValidAssignment(trimmed) == 1)
+	{
+		t_assignment(trimmed, head);
+		return;
+	}
+	while (trimmed[i]) { 
+		if (trimmed[i] == 34 || trimmed[i] == 39)
+			i += t_argument(trimmed, head, i);
+		else if (trimmed[i] == '<' || trimmed[i] == '>')
+			i += t_redirection(trimmed, head, i);
+		else if (trimmed[i] == '|')
+			i += t_pipe(head, &commandExist);
+		else if (isWhiteSpace(trimmed[i]) == 0) {
+			if (commandExist == 1)
+				i += t_argument(trimmed, head, i);
 			else
-			 	i += argument(input, head, i);
+				i += t_command(trimmed, head, i, &commandExist);
 		}
-		if (isQuoted == 0 && input[i] == 45)
-		 	i += option(input, head, i);
-		//if (input[i] == 60 || input[i] == 62 || input[i] == 124) {
-			//commandExist = 0;
-		//}
-		//else if (input[i] == 34 || input[i] == 39)
-		// {
-		// 	int open = input[i];
-		// 	i += argument(input, head, i);
-		// 	if (input[i] != open)
-		// 		error_unclosed_quotes();
-		// }
 		i++;
 	}
 	while(head != NULL)

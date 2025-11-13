@@ -18,22 +18,21 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-typedef enum {
-	ASSIGNMENT = 1,
-	COMMAND = 2,
-	OPTION = 3,
-	PIPE = 5,
-	ARGUMENT = 4,
-	IN_REDIR = 6,
-	OUT_REDIR = 7,
-	DEL_IN_REDIR = 8,
-	APP_MOD_OUT_REDIR = 9
-} TokenType;
+typedef enum e_token_type {
+	COMMAND = 1,
+	ARGUMENT = 2,
+	PIPE = 3,
+	REDIR_IN = 5,
+	REDIR_OUT = 4,
+	REDIR_APPEND = 6,
+	HEREDOC = 7,
+	T_EOF = 8,
+	ASSIGNMENT = 9
+} t_token_type;
 
 typedef struct {
-	TokenType type;
+	t_token_type type;
 	char *value;
-	int line;
 } Token;
 
 typedef struct s_node{
@@ -41,8 +40,41 @@ typedef struct s_node{
 	struct s_node *next;
 } s_node;
 
+typedef enum e_node_type {
+	NODE_COMMAND = 1,
+	NODE_ARGUMENT = 2,
+	NODE_PIPE = 3,
+	NODE_REDIR_IN = 5,
+	NODE_REDIR_OUT = 4,
+	NODE_REDIR_APPEND = 6,
+	NODE_HEREDOC = 7,
+	NODE_EOF = 8,
+} t_node_type;
+
+typedef struct s_ast {
+t_node_type type;
+char **argv;
+char *infile;
+char *outfile;
+int append;
+struct s_ast *left;
+struct s_ast *right;
+ } t_ast;
+
+int isWhiteSpace(char c);
+int isAlphanumeric(char c);
+size_t	ft_strlen(const char *str);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*strjoin(char const *s1, char const *s2);
+char* trim(char *input);
+
+void add_node(s_node* list, Token *newToken);
+
+int t_command(char* input, s_node *list, int start, int *commandFlag);
+int t_argument(char* input, s_node* list, int start);
+int t_pipe(s_node *list, int *commandFlag);
+int t_redirection(char *input, s_node* list, int start);
+
 void scanInput(char* input, s_node *llist);
 
 #endif
