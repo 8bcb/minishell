@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 10:43:05 by pkosciel          #+#    #+#             */
-/*   Updated: 2025/11/10 09:15:43 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/17 07:31:34 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,7 @@
 
 typedef enum e_node_type {
 	NODE_COMMAND,
-	NODE_PIPE,
-	NODE_REDIR_IN,
-	NODE_REDIR_OUT,
-	NODE_REDIR_APPEND,
-	NODE_HEREDOC
+	NODE_PIPE
 } t_node_type;
 
 typedef struct s_ast {
@@ -41,6 +37,8 @@ typedef struct s_ast {
 	char			**infile; // < file
 	char			**outfile; // > file, >> file
 	int				append;
+	int           	heredoc;     // 1 if heredoc was present
+    char         	*heredoc_tmp;
 } t_ast;
 
 typedef struct s_env {
