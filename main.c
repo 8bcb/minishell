@@ -16,13 +16,19 @@ int main(void)
 {
 	char *rl;
 	s_node *head;
+	int status;
+
+	status = 0;
 	head = (s_node *)malloc(sizeof(s_node));
 	if (!head)
 		return 1;
 	printf("Head: %s\n", head->val.value);
 	while (1) {
 		rl = readline("Prompt > ");
-		scanInput(rl, head);
+		status = scanInput(rl, head);
+		//if (status == -1)
+			//free memory and exit
+		printList(head);
 		//parseInput
 		//execute
 	}

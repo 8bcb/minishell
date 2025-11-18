@@ -17,22 +17,29 @@ int t_command(char* input, s_node *list, int start, int *commandFlag)
 
 int t_argument(char* input, s_node* list, int start) 
 {
-	int i = start;
+	int i;
 	Token newToken;
-	if (start == 34) {
+	int openQuote;
 
+	i = start;
+	openQuote = 0;
+	if (input[i] == 34 || input[i] == 39) {
+		openQuote = input[i];
+		i++;
 	}
-	else if (start == 39) {
-
+	while (input[i] && isWhiteSpace(input[i]) != 1) 
+	{
+		if (openQuote != 0 && input[i] == openQuote)
+			openQuote = 0;
+		i++;
 	}
-	else {
-		while (input[i] && isWhiteSpace(input[i]) != 1)
-			i++;
+	if (openQuote != 0) {
+		_unclosed_quotes_error();
+		return -1;
 	}
-	newToken.value = ft_substr(input, start - 1, i - start + 2);
+	newToken.value = ft_substr(input, start, i - start + 2);
 	newToken.type = ARGUMENT;
 	add_node(list, &newToken);
-	printf("i: %d, start: %d\n", i, start);
 	return i - start;
 }
 
@@ -69,8 +76,9 @@ int t_redirection(char *input, s_node* list, int start)
 			else
 				newToken.type = REDIR_OUT;
 			newToken.value = ft_substr(input, start, 2);
-		}
-		//errorś
+		} 
+		else
+			_invalid_redirection_error();
 	add_node(list, &newToken);
 	return ft_strlen(newToken.value);
 }

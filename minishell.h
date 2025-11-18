@@ -22,8 +22,8 @@ typedef enum e_token_type {
 	COMMAND = 1,
 	ARGUMENT = 2,
 	PIPE = 3,
-	REDIR_IN = 5,
-	REDIR_OUT = 4,
+	REDIR_IN = 4,
+	REDIR_OUT = 5,
 	REDIR_APPEND = 6,
 	HEREDOC = 7,
 	T_EOF = 8,
@@ -70,11 +70,17 @@ char* trim(char *input);
 
 void add_node(s_node* list, Token *newToken);
 
+
 int t_command(char* input, s_node *list, int start, int *commandFlag);
 int t_argument(char* input, s_node* list, int start);
 int t_pipe(s_node *list, int *commandFlag);
 int t_redirection(char *input, s_node* list, int start);
 
-void scanInput(char* input, s_node *llist);
+int scanInput(char* input, s_node *llist);
+void printList(s_node *head);
+
+void _invalid_assignment_error();
+void _unclosed_quotes_error();
+void _invalid_redirection_error();
 
 #endif

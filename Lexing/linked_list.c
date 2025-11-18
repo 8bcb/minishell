@@ -23,3 +23,11 @@ void add_node(s_node* list, Token *newToken)
 		tail->next = newNode;
 	}
 }
+
+void printList(s_node *head) {
+	while(head != NULL)
+	{
+		printf("Token %d: %s\n",(int)head->val.type, head->val.value);
+		head = head->next;
+	}
+}

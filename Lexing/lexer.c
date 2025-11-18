@@ -14,27 +14,32 @@
 
 int isValidAssignment(char *str) 
 {
-	int i;
 	int hasEqualsSign;
 	int openQuote;
+	int hasInvalidCharacters;
+	int isValid;
 
-	i = 0;
 	hasEqualsSign = 0;
 	openQuote = 0;
-	if (isAlphanumeric(str[i]) == 1 && (str[i] >= 48 && str[i] <= 57))
+	hasInvalidCharacters = 0;
+	if (isAlphanumeric(*str) == 0)
 		return 0;
-	while (str[i]) 
+	while (*str) 
 	{
-		if (openQuote == 0 && str[i] == '=')
+		if (openQuote == 0 && *str == '=')
 			hasEqualsSign++;
-		else if (str[i] == 34 || str[i] == 39)
-			openQuote = (openQuote == 0 ? str[i] : 0);
-		else if (openQuote == 0 && (isWhiteSpace(str[i]) == 1
-			|| isAlphanumeric(str[i]) == 0))
-			return 0;
-		i++;
+		else if (((*str == 34 || *str == 39) && openQuote == 0 ) || (*str == openQuote && openQuote != 0))
+			openQuote = (openQuote == 0 ? *str : 0);
+		else if (openQuote == 0 && isWhiteSpace(*str) == 1)
+			hasInvalidCharacters = 1;
+		str++;
 	}
-	return (hasEqualsSign == 1 && openQuote == 0) ? 1 : 0;
+	isValid = ((hasEqualsSign == 1 && openQuote != 0) || (hasEqualsSign == 1 && hasInvalidCharacters == 1)) ? -1 : 1;
+	if (hasEqualsSign == 1 && openQuote != 0)
+		_unclosed_quotes_error();
+	if (hasEqualsSign == 1 && hasInvalidCharacters == 1)
+		_invalid_assignment_error();
+	return hasEqualsSign == 0 ? 0 : isValid;
 }
 
 void t_assignment(char* str, s_node* head)
@@ -46,21 +51,27 @@ void t_assignment(char* str, s_node* head)
 	add_node(head, &newToken);
 }
 
-void scanInput(char* input, s_node *head)
+int scanInput(char* input, s_node *head)
 {
 	int i = 0;
 	int commandExist = 0;
 	char* trimmed;
+	int isAssignment;
 
 	trimmed = trim(input);
-	if (isValidAssignment(trimmed) == 1)
+	isAssignment = isValidAssignment(trimmed);
+	if (isAssignment == 1 || isAssignment == -1)
 	{
-		t_assignment(trimmed, head);
-		return;
+		if (isAssignment == 1)
+			t_assignment(trimmed, head);
+		return -1;
 	}
 	while (trimmed[i]) { 
-		if (trimmed[i] == 34 || trimmed[i] == 39)
+		if (trimmed[i] == 34 || trimmed[i] == 39) {
+			if (t_argument(trimmed, head, i) == -1)
+				return -1;
 			i += t_argument(trimmed, head, i);
+		}
 		else if (trimmed[i] == '<' || trimmed[i] == '>')
 			i += t_redirection(trimmed, head, i);
 		else if (trimmed[i] == '|')
@@ -73,10 +84,6 @@ void scanInput(char* input, s_node *head)
 		}
 		i++;
 	}
-	while(head != NULL)
-	{
-		printf("Token %d: %s\n",(int)head->val.type, head->val.value);
-		head = head->next;
-	}
+	return 0;
 }
 
