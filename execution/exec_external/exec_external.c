@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 09:03:55 by asia              #+#    #+#             */
-/*   Updated: 2025/11/13 10:38:14 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/18 10:07:45 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,34 @@ int     spawn_execve_with_redirs(const char *path, char **argv, const char *infi
     }
     waitpid(pid, &status, 0);
     return status_from_wait(status);
+}
+
+void    exec_external_child(t_ast *cmd, t_env *env)
+{
+    char *path;
+    
+    (void)env;
+    if (contains_slash(cmd->argv[0]))
+    {
+        execve(cmd->argv[0], cmd->argv, environ);
+        if (errno == ENOENT)
+            _exit(127);
+        if (errno == EACCES || errno == ENOTDIR || errno == EISDIR)
+            _exit(126);
+        _exit(126);
+    }
+    path = resolve_in_path(cmd->argv[0]);
+    if (!path)
+    {
+        print_cmd_error(cmd->argv[0], "command not found");
+        _exit(127);
+    }
+    execve(path, cmd->argv, environ);
+    if (errno == ENOENT)
+        _exit(127);
+    if (errno == EACCES || errno == ENOTDIR || errno == EISDIR)
+        _exit(126);
+    _exit(126);
 }
 
 int exec_external(t_ast *cmd, t_env *env)

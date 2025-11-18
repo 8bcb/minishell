@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 09:16:06 by asia              #+#    #+#             */
-/*   Updated: 2025/11/13 10:08:49 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/18 10:08:15 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int     spawn_execve(const char *path, char **argv);
 char    *resolve_in_path(char *command);
 int     spawn_execve_with_redirs(const char *path, char **argv, const char *infile, 
     const char *outfile, int append);
+void    exec_external_child(t_ast *cmd, t_env *env);
 
 // exec_external_utils.c
 void        free_split(char **split_array);

@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 08:40:14 by pkosciel          #+#    #+#             */
-/*   Updated: 2025/11/17 06:52:44 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/18 11:06:03 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,22 @@ int main(void)
 		rl = readline(prompt_buf);
 		if (!rl) break;
 		if (*rl) add_history(rl);
-		char **argv = ft_split(rl, ' ');
+		char	**argv;
+		t_ast	*node;
+
+		argv = ft_split(rl, ' ');
 		if (argv && argv[0])
 		{
-			t_ast *node = mock_node_from_argv(argv);
-			exit_status = exec_ast(node, NULL);
-			(void)exit_status;
-			free_node(node);
+			node = build_mock_ast_from_argv(argv);
+			if (node)
+			{
+				exit_status = exec_ast(node, NULL);
+		/* TODO: free full AST here (commands + pipes) */
+		/* free_ast(node); */
+			}
 		}
 		else
-		{
 			free(argv);
-		}
 		free(rl);
 		// scanInput(rl);
 		//parseInput

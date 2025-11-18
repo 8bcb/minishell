@@ -1,110 +1,230 @@
-// AI generated, no idea whats happening inside
+// AI generated - no idea whats happening here
 #include "minishell.h"
 #include "execution/exec.h"
-#include <string.h>   // strcmp
-#include <stdarg.h>
+#include <string.h>
 #include <errno.h>
 
-// small dup helpers (use your libft versions if you prefer)
-static char **dup_vec_filtered(int keep_count) {
-    char **out = ft_calloc(keep_count + 1, sizeof(char *));
-    if (!out) return NULL;
-    return out; // callers fill it; null-terminated by calloc
+static char	**dup_vec_filtered(int keep_count)
+{
+	char	**out;
+
+	out = ft_calloc(keep_count + 1, sizeof(char *));
+	if (!out)
+		return (NULL);
+	return (out);
 }
 
-static char **one_file_array_dup(const char *file) {
-    if (!file) return NULL;
-    char **arr = ft_calloc(2, sizeof(char *));
-    if (!arr) return NULL;
-    arr[0] = ft_strdup(file);
-    if (!arr[0]) { free(arr); return NULL; }
-    return arr;
+static char	**one_file_array_dup(const char *file)
+{
+	char	**arr;
+
+	if (!file)
+		return (NULL);
+	arr = ft_calloc(2, sizeof(char *));
+	if (!arr)
+		return (NULL);
+	arr[0] = ft_strdup(file);
+	if (!arr[0])
+	{
+		free(arr);
+		return (NULL);
+	}
+	return (arr);
 }
 
 /*
 ** mock_node_from_argv:
 **  - Consumes (frees) the incoming argv + its strings
-**  - Builds a node with:
-**      node->argv     = cleaned argv (no redir tokens)
+**  - Builds a NODE_COMMAND with:
+**      node->argv     = cleaned argv (no <,>,>> tokens)
 **      node->infile   = ["file", NULL] if last "< file" present
 **      node->outfile  = ["file", NULL] if last ">" or ">>" present
 **      node->append   = 1 if last was ">>", else 0
 */
-static t_ast *mock_node_from_argv(char **argv)
+static t_ast	*mock_node_from_argv(char **argv)
 {
-    t_ast  *node = NULL;
-    int     i, keep_count = 0;
-    int     last_in = -1, last_out = -1, last_out_is_append = 0;
-    char   *infile = NULL, *outfile = NULL;
-    char  **argv_clean = NULL;
+	t_ast	*node;
+	int		i;
+	int		keep;
+	int		last_in;
+	int		last_out;
+	int		last_out_is_append;
+	char	*infile;
+	char	*outfile;
+	char	**argv_clean;
+	int		k;
 
-    if (!argv) return NULL;
+	if (!argv)
+		return (NULL);
+	last_in = -1;
+	last_out = -1;
+	last_out_is_append = 0;
+	i = 0;
+	while (argv[i])
+	{
+		if (strcmp(argv[i], "<") == 0 && argv[i + 1])
+			last_in = i;
+		else if ((strcmp(argv[i], ">") == 0 || strcmp(argv[i], ">>") == 0)
+			&& argv[i + 1])
+		{
+			last_out = i;
+			if (argv[i][1] == '>')
+				last_out_is_append = 1;
+		}
+		i++;
+	}
+	keep = 0;
+	i = 0;
+	while (argv[i])
+	{
+		if (strcmp(argv[i], "<") == 0 && argv[i + 1])
+		{
+			i++;
+		}
+		else if ((strcmp(argv[i], ">") == 0 || strcmp(argv[i], ">>") == 0)
+			&& argv[i + 1])
+		{
+			i++;
+		}
+		else
+			keep++;
+		i++;
+	}
+	infile = NULL;
+	outfile = NULL;
+	if (last_in >= 0)
+		infile = ft_strdup(argv[last_in + 1]);
+	if (last_out >= 0)
+		outfile = ft_strdup(argv[last_out + 1]);
+	argv_clean = dup_vec_filtered(keep);
+	if (!argv_clean)
+		return (NULL);
+	i = 0;
+	k = 0;
+	while (argv[i])
+	{
+		if (strcmp(argv[i], "<") == 0 && argv[i + 1])
+			i++;
+		else if ((strcmp(argv[i], ">") == 0 || strcmp(argv[i], ">>") == 0)
+			&& argv[i + 1])
+			i++;
+		else
+		{
+			argv_clean[k] = ft_strdup(argv[i]);
+			k++;
+		}
+		i++;
+	}
+	i = 0;
+	while (argv[i])
+	{
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
+	node = ft_calloc(1, sizeof(*node));
+	if (!node)
+		return (NULL);
+	node->type = NODE_COMMAND;
+	node->argv = argv_clean;
+	if (infile)
+		node->infile = one_file_array_dup(infile);
+	if (outfile)
+		node->outfile = one_file_array_dup(outfile);
+	node->append = last_out_is_append;
+	node->left = NULL;
+	node->right = NULL;
+	free(infile);
+	free(outfile);
+	return (node);
+}
 
-    /* 1) Find last < and last > / >> */
-    for (i = 0; argv[i]; ++i) {
-        if (!strcmp(argv[i], "<") && argv[i+1]) {
-            last_in = i;
-        } else if ((!strcmp(argv[i], ">") || !strcmp(argv[i], ">>")) && argv[i+1]) {
-            last_out = i;
-            last_out_is_append = (argv[i][1] == '>');
-        }
-    }
+static int	find_pipe_index(char **argv)
+{
+	int	i;
 
-    /* 2) Extract filenames (duplicate), count kept args (non-redir tokens) */
-    for (i = 0; argv[i]; ++i) {
-        if (!strcmp(argv[i], "<") && argv[i+1]) { i++; continue; }
-        if ((!strcmp(argv[i], ">") || !strcmp(argv[i], ">>")) && argv[i+1]) { i++; continue; }
-        keep_count++;
-    }
+	i = 0;
+	while (argv[i])
+	{
+		if (strcmp(argv[i], "|") == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
 
-    if (last_in >= 0)   infile  = ft_strdup(argv[last_in + 1]);
-    if (last_out >= 0)  outfile = ft_strdup(argv[last_out + 1]);
+static char	**dup_segment(char **argv, int start, int end)
+{
+	int		len;
+	int		i;
+	char	**seg;
 
-    /* 3) Build cleaned argv */
-    argv_clean = dup_vec_filtered(keep_count);
-    if (!argv_clean) goto oom;
+	len = end - start;
+	seg = ft_calloc(len + 1, sizeof(char *));
+	if (!seg)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		seg[i] = ft_strdup(argv[start + i]);
+		if (!seg[i])
+			return (seg);
+		i++;
+	}
+	return (seg);
+}
 
-    int k = 0;
-    for (i = 0; argv[i]; ++i) {
-        if (!strcmp(argv[i], "<") && argv[i+1]) { i++; continue; }
-        if ((!strcmp(argv[i], ">") || !strcmp(argv[i], ">>")) && argv[i+1]) { i++; continue; }
-        argv_clean[k] = ft_strdup(argv[i]);
-        if (!argv_clean[k]) goto oom;
-        k++;
-    }
-    /* argv_clean[k] already NULL due to calloc */
+/* frees original argv (and its strings) */
+static void	free_argv(char **argv)
+{
+	int	i;
 
-    /* 4) Free original argv (and its strings) to avoid leaks */
-    for (i = 0; argv[i]; ++i) free(argv[i]);
-    free(argv);
+	if (!argv)
+		return ;
+	i = 0;
+	while (argv[i])
+	{
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
+}
 
-    /* 5) Assemble node */
-    node = ft_calloc(1, sizeof(*node));
-    if (!node) goto oom;
+/* Builds either:
+**  - a NODE_COMMAND (no pipe)
+**  - a NODE_PIPE with left/right NODE_COMMAND (single '|')
+*/
+static t_ast	*build_mock_ast_from_argv(char **argv)
+{
+	int		pipe_idx;
+	int		i;
+	char	**left_argv;
+	char	**right_argv;
+	t_ast	*left;
+	t_ast	*right;
+	t_ast	*pipe_node;
 
-    node->type    = NODE_COMMAND;
-    node->argv    = argv_clean;              // owns
-    node->infile  = infile  ? one_file_array_dup(infile)  : NULL;  // owns
-    node->outfile = outfile ? one_file_array_dup(outfile) : NULL;  // owns
-    node->append  = last_out_is_append ? 1 : 0;
-    node->left    = NULL;
-    node->right   = NULL;
-
-    free(infile);
-    free(outfile);
-    return node;
-
-oom:
-    if (argv_clean) {
-        for (int j = 0; argv_clean[j]; ++j) free(argv_clean[j]);
-        free(argv_clean);
-    }
-    if (infile)  free(infile);
-    if (outfile) free(outfile);
-    /* also free original argv if we still own it */
-    if (argv) {
-        for (i = 0; argv[i]; ++i) free(argv[i]);
-        free(argv);
-    }
-    return NULL;
+	if (!argv)
+		return (NULL);
+	pipe_idx = find_pipe_index(argv);
+	if (pipe_idx < 0)
+		return (mock_node_from_argv(argv));
+	/* build left/right argv segments */
+	left_argv = dup_segment(argv, 0, pipe_idx);
+	i = 0;
+	while (argv[i])
+		i++;
+	right_argv = dup_segment(argv, pipe_idx + 1, i);
+	free_argv(argv);
+	left = mock_node_from_argv(left_argv);
+	right = mock_node_from_argv(right_argv);
+	if (!left || !right)
+		return (NULL);
+	pipe_node = ft_calloc(1, sizeof(*pipe_node));
+	if (!pipe_node)
+		return (NULL);
+	pipe_node->type = NODE_PIPE;
+	pipe_node->left = left;
+	pipe_node->right = right;
+	return (pipe_node);
 }
