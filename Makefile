@@ -1,4 +1,4 @@
-NAME := minishell
+NAME := mini
 SRC := main.c \
 Lexing/lexer.c \
 execution/exec_ast.c execution/exec_command.c execution/exec_pipeline.c \
@@ -7,6 +7,10 @@ execution/exec_pipeline_utils.c \
 execution/builtins/echo.c execution/builtins/exec_builtin.c \
 execution/redirection/exec_redirection.c \
 
+Lexing/utils.c \
+Lexing/linked_list.c \
+Lexing/tokens.c \
+Lexing/errors.c
 OBJ = $(SRC:.c=.o)
 CC = cc
 CFLAGS := -Wall -Wextra -Werror

@@ -10,30 +10,80 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-int isWhiteSpace(char c) {
-	if ((c >= 9 && c <= 13) || c == 32)
-		return 1;
-	return 0;
+int isValidAssignment(char *str) 
+{
+	int hasEqualsSign;
+	int openQuote;
+	int hasInvalidCharacters;
+	int isValid;
+
+	hasEqualsSign = 0;
+	openQuote = 0;
+	hasInvalidCharacters = 0;
+	if (isAlphanumeric(*str) == 0)
+		return 0;
+	while (*str) 
+	{
+		if (openQuote == 0 && *str == '=')
+			hasEqualsSign++;
+		else if (((*str == 34 || *str == 39) && openQuote == 0 ) || (*str == openQuote && openQuote != 0))
+			openQuote = (openQuote == 0 ? *str : 0);
+		else if (openQuote == 0 && isWhiteSpace(*str) == 1)
+			hasInvalidCharacters = 1;
+		str++;
+	}
+	isValid = ((hasEqualsSign == 1 && openQuote != 0) || (hasEqualsSign == 1 && hasInvalidCharacters == 1)) ? -1 : 1;
+	if (hasEqualsSign == 1 && openQuote != 0)
+		_unclosed_quotes_error();
+	if (hasEqualsSign == 1 && hasInvalidCharacters == 1)
+		_invalid_assignment_error();
+	return hasEqualsSign == 0 ? 0 : isValid;
 }
 
-int countWords(char *str) {
-	int counter = 0;
+void t_assignment(char* str, s_node* head)
+{
+	Token newToken;
+
+	newToken.type = ASSIGNMENT;
+	newToken.value = str;
+	add_node(head, &newToken);
+}
+
+int scanInput(char* input, s_node *head)
+{
 	int i = 0;
-	while (str[i] && str[i] <= 32)
-		i++;
-	while (str[i + 1]) {
-		if (isWhiteSpace(str[i]) == 1 && isWhiteSpace(str[i + 1]) == 0)
-			counter++;
+	int commandExist = 0;
+	char* trimmed;
+	int isAssignment;
+
+	trimmed = trim(input);
+	isAssignment = isValidAssignment(trimmed);
+	if (isAssignment == 1 || isAssignment == -1)
+	{
+		if (isAssignment == 1)
+			t_assignment(trimmed, head);
+		return -1;
+	}
+	while (trimmed[i]) { 
+		if (trimmed[i] == 34 || trimmed[i] == 39) {
+			if (t_argument(trimmed, head, i) == -1)
+				return -1;
+			i += t_argument(trimmed, head, i);
+		}
+		else if (trimmed[i] == '<' || trimmed[i] == '>')
+			i += t_redirection(trimmed, head, i);
+		else if (trimmed[i] == '|')
+			i += t_pipe(head, &commandExist);
+		else if (isWhiteSpace(trimmed[i]) == 0) {
+			if (commandExist == 1)
+				i += t_argument(trimmed, head, i);
+			else
+				i += t_command(trimmed, head, i, &commandExist);
+		}
 		i++;
 	}
-	return counter + 1;
-}
-
-void scanInput(char* input)
-{
-	printf("Words: %d\n",countWords(input));
-	printf("%s\n", input);
+	return 0;
 }
 
