@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 09:03:55 by asia              #+#    #+#             */
-/*   Updated: 2025/11/18 10:07:45 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/24 09:04:24 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,36 +97,13 @@ int exec_external(t_ast *cmd, t_env *env)
     }
     child_process_status = spawn_execve_with_redirs(path, cmd->argv, get_last_file(cmd->infile), 
         get_last_file(cmd->outfile), cmd->append);
+    if (child_process_status == 127)
+            print_cmd_error(cmd->argv[0], strerror(ENOENT));
     if (child_process_status == 126)
             print_cmd_error(cmd->argv[0], strerror(EACCES));
     free(path);
     return child_process_status;
 }
-
-int spawn_execve(const char *path, char **argv)
-{
-    pid_t   pid;
-    int     status;
-
-    pid = fork();
-    if (pid < 0)
-    {
-        print_cmd_error(argv[0], strerror(errno));
-        return 1;
-    }
-    if (pid == 0)
-    {
-        execve(path, argv, environ);
-        if (errno == ENOENT)
-            _exit(127);
-        if (errno == EACCES || errno == ENOTDIR || errno == EISDIR)
-            _exit(126);
-        _exit(126);
-    }
-    waitpid(pid, &status, 0);
-    return status_from_wait(status);
-}
-
 
 char    *resolve_in_path(char *command)
 {

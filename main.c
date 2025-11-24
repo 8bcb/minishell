@@ -6,36 +6,13 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 08:40:14 by pkosciel          #+#    #+#             */
-/*   Updated: 2025/11/18 11:06:03 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/19 08:49:04 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "execution/exec.h"
 #include "./test_node.c"
-
-// TODO: remove - only for dev purposes
-int free_node(t_ast *n)
-{
-    int i = 0;
-
-    if (!n) return 0;
-
-    if (n->argv) {
-        while (n->argv[i]) free(n->argv[i++]);
-        free(n->argv);
-    }
-    if (n->infile) {
-        if (n->infile[0]) free(n->infile[0]);
-        free(n->infile);
-    }
-    if (n->outfile) {
-        if (n->outfile[0]) free(n->outfile[0]);
-        free(n->outfile);
-    }
-    free(n);
-    return 1;
-}
 
 int main(void) 
 {
@@ -44,7 +21,6 @@ int main(void)
 	
 	while (1) {
 		char prompt_buf[64];
-        // Show status in the prompt when interactive; stay silent when piped
         if (isatty(STDIN_FILENO))
             snprintf(prompt_buf, sizeof(prompt_buf), "minishell[%d]> ", exit_status);
         else
@@ -60,11 +36,7 @@ int main(void)
 		{
 			node = build_mock_ast_from_argv(argv);
 			if (node)
-			{
 				exit_status = exec_ast(node, NULL);
-		/* TODO: free full AST here (commands + pipes) */
-		/* free_ast(node); */
-			}
 		}
 		else
 			free(argv);
