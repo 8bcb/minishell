@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 07:54:28 by asia              #+#    #+#             */
-/*   Updated: 2025/11/13 09:19:54 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/26 09:47:41 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,14 @@ typedef struct s_builtin {
 const t_builtin     *builtin_lookup(const char *name);
 int                 exec_builtin(char **argv, t_env *env);
 
-int             builtin_echo(char **argv, t_env *env);
+int				builtin_echo(char **argv, t_env *env);
+int				builtin_pwd(char **argv, t_env *env);
+int				builtin_env(char **argv, t_env *env);
+int				builtin_cd(char **argv, t_env *env);
+int				builtin_export(char **argv, t_env *env);
+int				builtin_unset(char **argv, t_env *env);
+int				builtin_exit(char **argv, t_env *env);
+
 int             is_new_line(char *str);
 
 #endif

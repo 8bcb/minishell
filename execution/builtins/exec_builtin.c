@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 08:07:36 by asia              #+#    #+#             */
-/*   Updated: 2025/11/06 10:00:01 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/26 09:48:01 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 #include "libft.h"
 
 static const t_builtin g_builtins[] = {
-    { "echo", &builtin_echo, 0},
-    /* { "pwd",   &builtin_pwd,   0 }, */
-	/* { "env",   &builtin_env,   0 }, */
-	/* { "cd",    &builtin_cd,    1 }, */
-	/* { "export",&builtin_export,1 }, */
-	/* { "unset", &builtin_unset, 1 }, */
-	/* { "exit",  &builtin_exit,  1 }, */
-	{ NULL,     NULL,          0 }
+	{ "pwd",   &builtin_pwd,   0 },
+	{ "env",   &builtin_env,   0 },
+	{ "cd",    &builtin_cd,    1 },
+	{ "export",&builtin_export,1 },
+	{ "unset", &builtin_unset, 1 },
+	{ "exit",  &builtin_exit,  1 },
+	{ NULL,    NULL,           0 }
 };
 
 int exec_builtin(char **argv, t_env *env)
