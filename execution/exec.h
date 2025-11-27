@@ -17,4 +17,6 @@ int	spawn_pipeline_children(int n_stages, pid_t *pids);
 void	dup_pipeline_ends(int (*pipes)[2], int n_pipes,
 			int index, int n_stages);
 
+void    print_cmd_error(const char *command, const char *message);
+
 #endif

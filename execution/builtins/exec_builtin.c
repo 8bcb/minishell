@@ -6,13 +6,12 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 08:07:36 by asia              #+#    #+#             */
-/*   Updated: 2025/11/26 09:48:01 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/27 06:50:35 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../execution/exec.h"
 #include "./builtins.h"
-#include "libft.h"
 
 static const t_builtin g_builtins[] = {
 	{ "pwd",   &builtin_pwd,   0 },

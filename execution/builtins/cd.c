@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/26 09:55:03 by asia              #+#    #+#             */
-/*   Updated: 2025/11/27 07:56:56 by asia             ###   ########.fr       */
+/*   Created: 2025/11/27 06:49:09 by asia              #+#    #+#             */
+/*   Updated: 2025/11/27 07:56:35 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./builtins.h"
 #include "../exec.h"
 
-extern char **environ;
-
-int builtin_env(char **argv, t_env *env)
+int builtin_cd(char **argv, t_env *env)
 {
-    int i;
+    int    res;
     (void)env;
-    if (argv[1])
-        return 1;
-    i = 0;
-    while (environ[i])
-    {
-        write(1, environ[i], ft_strlen(environ[i]));
-        write(1, "\n", 1);
-        i++;
-    }
+
+    if (!argv[1] || argv[2])
+        return (print_cmd_error("cd", "usage: cd <path>"), 1);
+    res = chdir(argv[1]);
+    if (res != 0)
+        return (print_cmd_error("cd", strerror(errno)), 1);
     return 0;
 }

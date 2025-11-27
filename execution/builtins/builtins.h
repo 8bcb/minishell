@@ -6,12 +6,15 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 07:54:28 by asia              #+#    #+#             */
-/*   Updated: 2025/11/26 09:47:41 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/27 07:53:24 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
+
+#include "libft.h"
+#include <unistd.h>
 
 typedef struct s_env t_env;
 

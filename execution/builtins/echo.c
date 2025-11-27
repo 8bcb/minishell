@@ -6,13 +6,12 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 07:59:23 by asia              #+#    #+#             */
-/*   Updated: 2025/11/06 09:59:37 by asia             ###   ########.fr       */
+/*   Updated: 2025/11/27 07:56:51 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./builtins.h"
-#include "libft.h"
-#include "unistd.h"
+#include "../exec.h"
 
 int builtin_echo(char **argv, t_env *env)
 {

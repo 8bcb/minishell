@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/26 09:55:03 by asia              #+#    #+#             */
-/*   Updated: 2025/11/27 07:56:56 by asia             ###   ########.fr       */
+/*   Created: 2025/11/27 07:54:21 by asia              #+#    #+#             */
+/*   Updated: 2025/11/27 07:54:48 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./builtins.h"
-#include "../exec.h"
+#include "./exec.h"
 
-extern char **environ;
-
-int builtin_env(char **argv, t_env *env)
+void    print_cmd_error(const char *command, const char *message)
 {
-    int i;
-    (void)env;
-    if (argv[1])
-        return 1;
-    i = 0;
-    while (environ[i])
-    {
-        write(1, environ[i], ft_strlen(environ[i]));
-        write(1, "\n", 1);
-        i++;
-    }
-    return 0;
+    if (!command)
+        command = "";
+    if (!message)
+        message = "";
+    write(2, "minishell: ", 11);
+    write(2, command, ft_strlen(command));
+    write(2, ": ", 2);
+    write(2, message, ft_strlen(message));
+    write(2, "\n", 1);
 }

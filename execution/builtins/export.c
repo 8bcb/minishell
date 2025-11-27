@@ -1,32 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/26 09:55:03 by asia              #+#    #+#             */
-/*   Updated: 2025/11/27 07:56:56 by asia             ###   ########.fr       */
+/*   Created: 2025/11/27 06:59:57 by asia              #+#    #+#             */
+/*   Updated: 2025/11/27 07:57:02 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./builtins.h"
 #include "../exec.h"
 
-extern char **environ;
-
-int builtin_env(char **argv, t_env *env)
+int builtin_export(char **argv, t_env *env)
 {
-    int i;
     (void)env;
-    if (argv[1])
-        return 1;
-    i = 0;
-    while (environ[i])
-    {
-        write(1, environ[i], ft_strlen(environ[i]));
-        write(1, "\n", 1);
-        i++;
-    }
+    (void)argv;
+
     return 0;
 }
