@@ -47,23 +47,35 @@ static t_ast	*mock_node_from_argv(char **argv)
 	int		i;
 	int		keep;
 	int		last_in;
+	int		last_in_is_heredoc;
 	int		last_out;
 	int		last_out_is_append;
 	char	*infile;
 	char	*outfile;
+	char	*heredoc_delim;
 	char	**argv_clean;
 	int		k;
 
 	if (!argv)
 		return (NULL);
 	last_in = -1;
+	last_in_is_heredoc = 0;
 	last_out = -1;
 	last_out_is_append = 0;
 	i = 0;
 	while (argv[i])
 	{
-		if (strcmp(argv[i], "<") == 0 && argv[i + 1])
+		if ((strcmp(argv[i], "<") == 0 || strcmp(argv[i], "<<") == 0)
+			&& argv[i + 1])
+		{
 			last_in = i;
+			last_in_is_heredoc = (argv[i][1] == '<');
+		}
+		else if (strncmp(argv[i], "<<", 2) == 0 && argv[i][2] != '\0')
+		{
+			last_in = i;
+			last_in_is_heredoc = 1;
+		}
 		else if ((strcmp(argv[i], ">") == 0 || strcmp(argv[i], ">>") == 0)
 			&& argv[i + 1])
 		{
@@ -77,24 +89,34 @@ static t_ast	*mock_node_from_argv(char **argv)
 	i = 0;
 	while (argv[i])
 	{
-		if (strcmp(argv[i], "<") == 0 && argv[i + 1])
-		{
+		if ((strcmp(argv[i], "<") == 0 || strcmp(argv[i], "<<") == 0)
+			&& argv[i + 1])
 			i++;
-		}
+		else if (strncmp(argv[i], "<<", 2) == 0 && argv[i][2] != '\0')
+			; /* skip "<<X" token */
 		else if ((strcmp(argv[i], ">") == 0 || strcmp(argv[i], ">>") == 0)
 			&& argv[i + 1])
-		{
 			i++;
-		}
 		else
 			keep++;
 		i++;
 	}
 	infile = NULL;
 	outfile = NULL;
+	heredoc_delim = NULL;
 	if (last_in >= 0)
-		infile = ft_strdup(argv[last_in + 1]);
-	if (last_out >= 0)
+	{
+		if (last_in_is_heredoc)
+		{
+			if (strcmp(argv[last_in], "<<") == 0 && argv[last_in + 1])
+				heredoc_delim = ft_strdup(argv[last_in + 1]);
+			else if (strncmp(argv[last_in], "<<", 2) == 0)
+				heredoc_delim = ft_strdup(argv[last_in] + 2);
+		}
+		else if (argv[last_in + 1])
+			infile = ft_strdup(argv[last_in + 1]);
+	}
+	if (last_out >= 0 && argv[last_out + 1])
 		outfile = ft_strdup(argv[last_out + 1]);
 	argv_clean = dup_vec_filtered(keep);
 	if (!argv_clean)
@@ -103,8 +125,11 @@ static t_ast	*mock_node_from_argv(char **argv)
 	k = 0;
 	while (argv[i])
 	{
-		if (strcmp(argv[i], "<") == 0 && argv[i + 1])
+		if ((strcmp(argv[i], "<") == 0 || strcmp(argv[i], "<<") == 0)
+			&& argv[i + 1])
 			i++;
+		else if (strncmp(argv[i], "<<", 2) == 0 && argv[i][2] != '\0')
+			; /* skip "<<X" */
 		else if ((strcmp(argv[i], ">") == 0 || strcmp(argv[i], ">>") == 0)
 			&& argv[i + 1])
 			i++;
@@ -134,10 +159,21 @@ static t_ast	*mock_node_from_argv(char **argv)
 	node->append = last_out_is_append;
 	node->left = NULL;
 	node->right = NULL;
+	if (heredoc_delim)
+	{
+		node->heredoc = 1;
+		node->heredoc_tmp = heredoc_delim;
+	}
+	else
+	{
+		node->heredoc = 0;
+		node->heredoc_tmp = NULL;
+	}
 	free(infile);
 	free(outfile);
 	return (node);
 }
+
 
 static int	find_pipe_index(char **argv)
 {
