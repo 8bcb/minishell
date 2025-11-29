@@ -1,26 +1,32 @@
 #include "../minishell.h"
 
-int t_command(char* input, s_node *list, int start, int *commandFlag)
+int t_command(char* input, s_node **list, int start, int *commandFlag)
 {
 	int i = start;
-	Token newToken;
+	Token* newToken;
 
+	newToken = malloc(sizeof(Token));
+	if (!newToken)
+		return - 1;
 	*commandFlag = 1;
-	newToken.type = COMMAND;
+	newToken->type = COMMAND;
 	while (input[i] && isWhiteSpace(input[i]) != 1) {
 		i++;
 	}
-	newToken.value = ft_substr(input, start, i - start + 2);
+	newToken->value = ft_substr(input, start, i - start);
 	add_node(list, &newToken);
 	return i - start;
 }
 
-int t_argument(char* input, s_node* list, int start) 
+int t_argument(char* input, s_node** list, int start) 
 {
 	int i;
-	Token newToken;
+	Token* newToken;
 	int openQuote;
 
+	newToken = malloc(sizeof(Token));
+	if (!newToken)
+		return - 1;
 	i = start;
 	openQuote = 0;
 	if (input[i] == 34 || input[i] == 39) {
@@ -37,48 +43,54 @@ int t_argument(char* input, s_node* list, int start)
 		_unclosed_quotes_error();
 		return -1;
 	}
-	newToken.value = ft_substr(input, start, i - start + 2);
-	newToken.type = ARGUMENT;
+	newToken->value = ft_substr(input, start, i - start);
+	newToken->type = ARGUMENT;
 	add_node(list, &newToken);
 	return i - start;
 }
 
-int t_pipe(s_node *list, int *commandFlag)
+int t_pipe(s_node **list, int *commandFlag)
 {
-	Token newToken;
+	Token* newToken;
 
+	newToken = malloc(sizeof(Token));
+	if (!newToken)
+		return - 1;
 	*commandFlag = 0;
-	newToken.type = PIPE;
-	newToken.value = "|";
+	newToken->type = PIPE;
+	newToken->value = "|";
 	add_node(list, &newToken);
 	return 1;
 }
 
-int t_redirection(char *input, s_node* list, int start) 
+int t_redirection(char *input, s_node **list, int start) 
 {
-	Token newToken;
+	Token* newToken;
 	char current;
 	char oneAhead;
 
+	newToken = malloc(sizeof(Token));
+	if (!newToken)
+		return - 1;
 	current = input[start];
 	oneAhead = input[start + 1];
 		if (current == oneAhead) {
 			if (current == '<')
-				newToken.type = HEREDOC;
+				newToken->type = HEREDOC;
 			else
-				newToken.type = REDIR_APPEND;
-			newToken.value = ft_substr(input, start, 3);
+				newToken->type = REDIR_APPEND;
+			newToken->value = ft_substr(input, start, 3);
 		}
 		else if (isWhiteSpace(oneAhead) == 1)
 		{
 			if (current == '<')
-				newToken.type = REDIR_IN;
+				newToken->type = REDIR_IN;
 			else
-				newToken.type = REDIR_OUT;
-			newToken.value = ft_substr(input, start, 2);
+				newToken->type = REDIR_OUT;
+			newToken->value = ft_substr(input, start, 2);
 		} 
 		else
 			_invalid_redirection_error();
 	add_node(list, &newToken);
-	return ft_strlen(newToken.value);
+	return ft_strlen(newToken->value);
 }

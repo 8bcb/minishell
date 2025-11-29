@@ -22,7 +22,7 @@ int isValidAssignment(char *str)
 	hasEqualsSign = 0;
 	openQuote = 0;
 	hasInvalidCharacters = 0;
-	if (isAlphanumeric(*str) == 0)
+	if (ft_isalpha(*str) == 0 && *str != '_')
 		return 0;
 	while (*str) 
 	{
@@ -42,48 +42,55 @@ int isValidAssignment(char *str)
 	return hasEqualsSign == 0 ? 0 : isValid;
 }
 
-void t_assignment(char* str, s_node* head)
+void t_assignment(char* str, s_node **head)
 {
-	Token newToken;
+	Token* newToken;
 
-	newToken.type = ASSIGNMENT;
-	newToken.value = str;
+	newToken = malloc(sizeof(Token));
+	if (!newToken)
+		return ;
+	newToken->type = ASSIGNMENT;
+	newToken->value = str;
 	add_node(head, &newToken);
 }
 
-int scanInput(char* input, s_node *head)
+s_node* scanInput(char* input, int* isAssignment)
 {
+	s_node *head;
 	int i = 0;
 	int commandExist = 0;
 	char* trimmed;
-	int isAssignment;
+	int increment;
 
+	head = NULL;
 	trimmed = trim(input);
-	isAssignment = isValidAssignment(trimmed);
-	if (isAssignment == 1 || isAssignment == -1)
+	*isAssignment = isValidAssignment(trimmed);
+	increment = 0;
+	if (*isAssignment == 1 || *isAssignment == -1)
 	{
-		if (isAssignment == 1)
-			t_assignment(trimmed, head);
-		return -1;
+		if (*isAssignment == 1)
+			t_assignment(trimmed, &head);
+		return NULL;
 	}
 	while (trimmed[i]) { 
 		if (trimmed[i] == 34 || trimmed[i] == 39) {
-			if (t_argument(trimmed, head, i) == -1)
-				return -1;
-			i += t_argument(trimmed, head, i);
+			increment = t_argument(trimmed, &head, i);
+			if (increment == -1)
+				return NULL;
+			i += increment;
 		}
 		else if (trimmed[i] == '<' || trimmed[i] == '>')
-			i += t_redirection(trimmed, head, i);
+			i += t_redirection(trimmed, &head, i);
 		else if (trimmed[i] == '|')
-			i += t_pipe(head, &commandExist);
+			i += t_pipe(&head, &commandExist);
 		else if (isWhiteSpace(trimmed[i]) == 0) {
 			if (commandExist == 1)
-				i += t_argument(trimmed, head, i);
+				i += t_argument(trimmed, &head, i);
 			else
-				i += t_command(trimmed, head, i, &commandExist);
+				i += t_command(trimmed, &head, i, &commandExist);
 		}
 		i++;
 	}
-	return 0;
+	return head;
 }
 
