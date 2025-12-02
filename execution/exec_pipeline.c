@@ -6,40 +6,25 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:00:00 by asia              #+#    #+#             */
-/*   Updated: 2025/11/27 10:15:12 by asia             ###   ########.fr       */
+/*   Updated: 2025/12/02 08:07:11 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./exec.h"
-#include "./exec_external/exec_external.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include "exec_external/exec_external.h"
 
-/*
-** close_all_pipes:
-**   Close every pipe fd in parent or child.
-*/
-static void	close_all_pipes(int (*pipes)[2], int number_of_pipes)
+typedef struct s_pipeline
 {
-	int	i;
+	int		n_stages;
+	int		n_pipes;
+	t_ast	**stages;
+	int		(*pipes)[2];
+	pid_t	*pids;
+}	t_pipeline;
 
-	if (!pipes || number_of_pipes <= 0)
-		return ;
-	i = 0;
-	while (i < number_of_pipes)
-	{
-		close(pipes[i][0]);
-		close(pipes[i][1]);
-		i++;
-	}
-}
-
-/*
-** get_last_status:
-**   Waits for all pids; returns the exit status of the last stage
-**   (standard shell semantics).
-*/
 static int	get_last_status(pid_t *pids, int n_stages)
 {
 	int	i;
@@ -57,71 +42,91 @@ static int	get_last_status(pid_t *pids, int n_stages)
 	return (last_status);
 }
 
-/*
-** exec_pipeline:
-**   Execute a pipeline represented by a NODE_PIPE tree.
-**   - Flatten tree into stages[]
-**   - Create pipes
-**   - Fork n_stages children, wiring stdin/stdout via dup2
-**   - In each child: apply pipes, then run_child_command(stages[i], env)
-**   - Parent: close all pipes, wait all children, return status of last stage
-*/
+static void	free_pipeline(t_pipeline *pl)
+{
+	if (pl->stages)
+		free(pl->stages);
+	if (pl->pids)
+		free(pl->pids);
+	if (pl->pipes)
+		free(pl->pipes);
+}
+
+static int	init_pipeline(t_ast *pipe_node, t_pipeline *pl)
+{
+	pl->n_stages = count_commands(pipe_node);
+	if (pl->n_stages <= 0)
+		return (1);
+	pl->n_pipes = pl->n_stages - 1;
+	pl->stages = malloc(sizeof(t_ast *) * pl->n_stages);
+	pl->pids = malloc(sizeof(pid_t) * pl->n_stages);
+	pl->pipes = NULL;
+	if (!pl->stages || !pl->pids)
+		return (1);
+	if (pl->n_pipes > 0)
+	{
+		pl->pipes = malloc(sizeof(int[2]) * pl->n_pipes);
+		if (!pl->pipes)
+			return (1);
+		if (create_pipes(pl->pipes, pl->n_pipes) != 0)
+			return (1);
+	}
+	collect_pipeline_stages(pipe_node, pl->stages);
+	return (0);
+}
+
+static int	fork_pipeline_child(t_pipeline *pl, int i, t_env *env)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid < 0)
+		return (1);
+	if (pid == 0)
+	{
+		if (pl->n_pipes > 0)
+		{
+			dup_pipeline_ends(pl->pipes, pl->n_pipes, i, pl->n_stages);
+			close_all_pipes(pl->pipes, pl->n_pipes);
+		}
+		run_child_command(pl->stages[i], env);
+		_exit(1);
+	}
+	pl->pids[i] = pid;
+	return (0);
+}
+
 int	exec_pipeline(t_ast *pipe_node, t_env *env)
 {
-	int		n_stages;
-	int		n_pipes;
-	t_ast	**stages;
-	int		(*pipes)[2];
-	pid_t	*pids;
-	int		i;
-	pid_t	pid;
+	t_pipeline	pl;
+	int			i;
+	int			status;
 
 	if (!pipe_node)
 		return (0);
-	n_stages = count_commands(pipe_node);
-	if (n_stages <= 0)
-		return (0);
-	n_pipes = n_stages - 1;
-	stages = (t_ast **)malloc(sizeof(t_ast *) * n_stages);
-	pids = (pid_t *)malloc(sizeof(pid_t) * n_stages);
-	pipes = NULL;
-	if (!stages || !pids)
+	pl.stages = NULL;
+	pl.pids = NULL;
+	pl.pipes = NULL;
+	if (init_pipeline(pipe_node, &pl) != 0)
+	{
+		free_pipeline(&pl);
 		return (1);
-	if (n_pipes > 0)
-	{
-		pipes = (int (*)[2])malloc(sizeof(int[2]) * n_pipes);
-		if (!pipes)
-			return (1);
-		if (create_pipes(pipes, n_pipes) != 0)
-			return (1);
 	}
-	collect_pipeline_stages(pipe_node, stages);
 	i = 0;
-	while (i < n_stages)
+	while (i < pl.n_stages)
 	{
-		pid = fork();
-		if (pid < 0)
-			return (1);
-		if (pid == 0)
+		if (fork_pipeline_child(&pl, i, env) != 0)
 		{
-			/* child: wire stdin/stdout to pipes, then exec command */
-			if (n_pipes > 0)
-			{
-				dup_pipeline_ends(pipes, n_pipes, i, n_stages);
-				close_all_pipes(pipes, n_pipes);
-			}
-			run_child_command(stages[i], env);
-			_exit(1);
+			if (pl.n_pipes > 0)
+				close_all_pipes(pl.pipes, pl.n_pipes);
+			free_pipeline(&pl);
+			return (1);
 		}
-		pids[i] = pid;
 		i++;
 	}
-	if (n_pipes > 0)
-		close_all_pipes(pipes, n_pipes);
-	i = get_last_status(pids, n_stages);
-	free(stages);
-	free(pids);
-	if (pipes)
-		free(pipes);
-	return (i);
+	if (pl.n_pipes > 0)
+		close_all_pipes(pl.pipes, pl.n_pipes);
+	status = get_last_status(pl.pids, pl.n_stages);
+	free_pipeline(&pl);
+	return (status);
 }

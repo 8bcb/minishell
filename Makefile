@@ -19,6 +19,7 @@ SRCS        := \
 	execution/exec_command.c \
 	execution/exec_pipeline.c \
 	execution/exec_pipeline_utils.c \
+	execution/exec_pipeline_utils_2.c \
 	execution/exec_utils.c \
 	execution/exec_external/exec_external.c \
 	execution/exec_external/exec_external_utils.c \
@@ -30,7 +31,8 @@ SRCS        := \
 	execution/builtins/export.c \
 	execution/builtins/pwd.c \
 	execution/builtins/unset.c \
-	execution/redirection/exec_redirection.c
+	execution/redirection/exec_redirection.c \
+	execution/redirection/exec_redirection_utils.c
 
 OBJS        := $(SRCS:.c=.o)
 
