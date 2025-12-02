@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_utils.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/26 09:55:03 by asia              #+#    #+#             */
-/*   Updated: 2025/12/02 08:54:02 by asia             ###   ########.fr       */
+/*   Created: 2025/12/02 08:28:27 by asia              #+#    #+#             */
+/*   Updated: 2025/12/02 08:29:23 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./builtins.h"
-#include "../exec.h"
+#ifndef ENV_UTILS_H
+# define ENV_UTILS_H
 
-int	builtin_env(char **argv, t_env *env)
-{
-	(void)argv;
-	while (env)
-	{
-		if (env->key && env->value)
-		{
-			write(1, env->key, ft_strlen(env->key));
-			write(1, "=", 1);
-			write(1, env->value, ft_strlen(env->value));
-			write(1, "\n", 1);
-		}
-		env = env->next;
-	}
-	return (0);
-}
+# include "./minishell.h"
+
+t_env	*env_init(char **envp);
+char	*env_get(t_env *env, const char *key);
+int		env_set(t_env **env, const char *key, const char *value);
+int		env_unset(t_env **env, const char *key);
+char	**env_to_envp(t_env *env);
+void	free_envp_array(char **envp);
+
+#endif

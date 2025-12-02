@@ -6,46 +6,52 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 08:40:14 by pkosciel          #+#    #+#             */
-/*   Updated: 2025/11/19 08:49:04 by asia             ###   ########.fr       */
+/*   Updated: 2025/12/02 08:45:03 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "execution/exec.h"
 #include "./test_node.c"
+#include "env_utils.h"
 
-int main(void) 
+int	main(int argc, char **argv, char **envp)
 {
 	char	*rl;
 	int		exit_status;
-	
-	while (1) {
-		char prompt_buf[64];
-        if (isatty(STDIN_FILENO))
-            snprintf(prompt_buf, sizeof(prompt_buf), "minishell[%d]> ", exit_status);
-        else
-            prompt_buf[0] = '\0';
-		rl = readline(prompt_buf);
-		if (!rl) break;
-		if (*rl) add_history(rl);
-		char	**argv;
-		t_ast	*node;
+	t_env	*env;
+	char	prompt_buf[64];
+	char	**argv_split;
+	t_ast	*node;
 
-		argv = ft_split(rl, ' ');
-		if (argv && argv[0])
+	(void)argc;
+	(void)argv;
+	exit_status = 0;
+	env = env_init(envp);
+	while (1)
+	{
+		if (isatty(STDIN_FILENO))
+			snprintf(prompt_buf, sizeof(prompt_buf),
+				"minishell[%d]> ", exit_status);
+		else
+			prompt_buf[0] = '\0';
+		rl = readline(prompt_buf);
+		if (!rl)
+			break ;
+		if (*rl)
+			add_history(rl);
+		argv_split = ft_split(rl, ' ');
+		if (argv_split && argv_split[0])
 		{
-			node = build_mock_ast_from_argv(argv);
+			node = build_mock_ast_from_argv(argv_split);
 			if (node)
-				exit_status = exec_ast(node, NULL);
+				exit_status = exec_ast(node, env);
 		}
 		else
-			free(argv);
+			free(argv_split);
 		free(rl);
-		// scanInput(rl);
-		//parseInput
-		//execute
 	}
-	return exit_status;
+	return (exit_status);
 }
 
 //lexing/parsing main

@@ -32,7 +32,8 @@ SRCS        := \
 	execution/builtins/pwd.c \
 	execution/builtins/unset.c \
 	execution/redirection/exec_redirection.c \
-	execution/redirection/exec_redirection_utils.c
+	execution/redirection/exec_redirection_utils.c \
+	env_utils.c \
 
 OBJS        := $(SRCS:.c=.o)
 
