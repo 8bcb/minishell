@@ -34,6 +34,7 @@ SRCS        := \
 	execution/redirection/exec_redirection.c \
 	execution/redirection/exec_redirection_utils.c \
 	env_utils.c \
+	signals.c
 
 OBJS        := $(SRCS:.c=.o)
 

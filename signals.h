@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_ast.c                                         :+:      :+:    :+:   */
+/*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/28 06:54:16 by asia              #+#    #+#             */
-/*   Updated: 2025/12/02 09:43:09 by asia             ###   ########.fr       */
+/*   Created: 2025/12/02 09:00:21 by asia              #+#    #+#             */
+/*   Updated: 2025/12/02 09:00:24 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./exec.h"
-#include "../signals.h"
+#ifndef SIGNALS_H
+# define SIGNALS_H
 
-int	exec_ast(t_ast *node, t_env *env)
-{
-	int	status;
+# include <signal.h>
 
-	if (!node)
-		return (0);
-	setup_exec_signals_parent();
-	if (node->type == NODE_COMMAND)
-		status = exec_command(node, env);
-	else if (node->type == NODE_PIPE)
-		status = exec_pipeline(node, env);
-	else
-		status = 1;
-	setup_interactive_signals();
-	return (status);
-}
+extern volatile sig_atomic_t	g_sig;
+
+void	setup_interactive_signals(void);
+void	setup_exec_signals_parent(void);
+
+#endif

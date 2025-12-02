@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 08:33:09 by asia              #+#    #+#             */
-/*   Updated: 2025/11/27 07:13:11 by asia             ###   ########.fr       */
+/*   Updated: 2025/12/02 09:45:03 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,13 @@ char  *join_path(const char *dir, const char *command)
     return final_path;
 }
 
-int status_from_wait(int status)
+int	status_from_wait(int status)
 {
-    if (WIFEXITED(status))
-        return WEXITSTATUS(status);
-    if (WIFSIGNALED(status))
-        return 128 + WTERMSIG(status);
-    return 1;   
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (status);
 }
 
 int contains_slash(const char *str)

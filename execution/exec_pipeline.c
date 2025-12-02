@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:00:00 by asia              #+#    #+#             */
-/*   Updated: 2025/12/02 08:07:11 by asia             ###   ########.fr       */
+/*   Updated: 2025/12/02 09:44:43 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ static int	fork_pipeline_child(t_pipeline *pl, int i, t_env *env)
 		return (1);
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (pl->n_pipes > 0)
 		{
 			dup_pipeline_ends(pl->pipes, pl->n_pipes, i, pl->n_stages);

@@ -5,15 +5,15 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/11 08:40:14 by pkosciel          #+#    #+#             */
-/*   Updated: 2025/12/02 08:45:03 by asia             ###   ########.fr       */
+/*   Created: 2025/11/27 12:35:00 by asia              #+#    #+#             */
+/*   Updated: 2025/12/02 10:02:07 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "execution/exec.h"
-#include "./test_node.c"
 #include "env_utils.h"
+#include "signals.h"
+#include "./test_node.c"
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -28,6 +28,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	exit_status = 0;
 	env = env_init(envp);
+	setup_interactive_signals();
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))

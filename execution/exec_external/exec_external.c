@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 09:03:55 by asia              #+#    #+#             */
-/*   Updated: 2025/12/02 08:46:29 by asia             ###   ########.fr       */
+/*   Updated: 2025/12/02 09:44:24 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	spawn_execve_with_redirs(const char *path, t_ast *cmd, char **envp)
 	}
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (apply_redirection(get_last_file(cmd->infile),
 				get_last_file(cmd->outfile),
 				cmd->append,
