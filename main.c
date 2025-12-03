@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 12:35:00 by asia              #+#    #+#             */
-/*   Updated: 2025/12/02 10:02:07 by asia             ###   ########.fr       */
+/*   Updated: 2025/12/03 08:54:58 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	main(int argc, char **argv, char **envp)
 			node = build_mock_ast_from_argv(argv_split);
 			if (node)
 				exit_status = exec_ast(node, env);
+				free_ast(node);
 		}
 		else
 			free(argv_split);

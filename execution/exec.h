@@ -20,5 +20,6 @@ void	dup_pipeline_ends(int (*pipes)[2], int n_pipes,
 
 void    print_cmd_error(const char *command, const char *message);
 int     preprocess_heredocs(t_ast *node);
+void  free_ast(t_ast *node);
 
 #endif
