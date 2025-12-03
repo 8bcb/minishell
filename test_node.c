@@ -169,6 +169,7 @@ static t_ast	*mock_node_from_argv(char **argv)
 		node->heredoc = 0;
 		node->heredoc_tmp = NULL;
 	}
+	node->heredoc_fd = -1;
 	free(infile);
 	free(outfile);
 	return (node);
@@ -262,5 +263,6 @@ static t_ast	*build_mock_ast_from_argv(char **argv)
 	pipe_node->type = NODE_PIPE;
 	pipe_node->left = left;
 	pipe_node->right = right;
+	pipe_node->heredoc_fd = -1;
 	return (pipe_node);
 }
