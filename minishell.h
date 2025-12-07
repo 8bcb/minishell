@@ -49,15 +49,14 @@ typedef struct s_env {
 } t_env;
 
 typedef enum e_token_type {
-	COMMAND = 1,
-	ARGUMENT = 2,
-	PIPE = 3,
-	REDIR_IN = 4,
-	REDIR_OUT = 5,
-	REDIR_APPEND = 6,
-	HEREDOC = 7,
-	T_EOF = 8,
-	ASSIGNMENT = 9
+	WORD = 1,
+	PIPE = 2,
+	REDIR_IN = 3,
+	REDIR_OUT = 4,
+	REDIR_APPEND = 5,
+	HEREDOC = 6,
+	T_EOF = 7,
+	ASSIGNMENT = 8
 } t_token_type;
 
 typedef struct s_token {
@@ -71,20 +70,22 @@ typedef struct s_node{
 } s_node;
 
 int isWhiteSpace(char c);
+int isSeparator(char c);
 char* trim(char *input);
 
 void add_node(s_node** list, Token **newToken);
 void free_list(s_node **list);
 void print_list(s_node *head);
 
-int t_command(char* input, s_node **list, int start, int *commandFlag);
+//int t_command(char* input, s_node **list, int start, int *commandFlag);
+int t_quoted_argument(char *input, s_node** list, int start, int quoteType);
 int t_argument(char* input, s_node **list, int start);
-int t_pipe(s_node **list, int *commandFlag);
+int t_pipe(s_node **list);
 int t_redirection(char *input, s_node **list, int start);
 
-s_node* scanInput(char* input, int* isAssignment);
+s_node* tokenizing(char* input, int* isAssignment);
 
-int read_list(s_node* list, t_ast* tree);
+//int read_list(s_node* list, t_ast* tree);
 
 void _invalid_assignment_error();
 void _unclosed_quotes_error();

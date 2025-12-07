@@ -7,23 +7,30 @@ int isWhiteSpace(char c)
 	return 0;
 }
 
+int isSeparator(char c)
+{
+	if (c == '|' || c == '<' || c == '>' || c == 34 || c == 39)
+		return 1;
+	return 0;
+}
+
 char* trim(char *input)
 {
 	int len;
-	int i;
+	int start;
 	int j;
 	int iter;
 
-	i = 0;
+	start = 0;
 	len = ft_strlen(input);
-	while (i < len && input[i] == ' ')
-		i++;
+	while (input[start] && isWhiteSpace(input[start]) == 1)
+		start++;
 	j = 0;
 	iter = len - 1;
-	while (iter >= 0 && input[iter] == ' ')
+	while (input[iter] && isWhiteSpace(input[iter]) == 1)
 	{
 		j++;
 		iter--;
 	}
-	return ft_substr(input, i, len - i - j + 1);
+	return ft_substr(input, start, len - start - j);
 }

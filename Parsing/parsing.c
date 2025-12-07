@@ -31,46 +31,46 @@ int assign_to_node(t_ast* ast_node, s_node* tokens_node)
     return 0;
 }
 
-int read_list(s_node* list, t_ast* tree) 
-{
-    s_node* currNode;
-    Token* currToken;
-    t_ast* prevRoot;
-    t_ast* lastAdded;
+// int read_list(s_node* list, t_ast* tree) 
+// {
+//     s_node* currNode;
+//     Token* currToken;
+//     t_ast* prevRoot;
+//     t_ast* lastAdded;
 
-    currNode = list;
-    while (currNode != NULL)
-    {
-        currToken = currNode->val;
-        if (currToken->type == COMMAND && tree == NULL)
-        {
-            tree = create_ast(NODE_COMMAND);
-            prevRoot = tree;
-            lastAdded = tree;
-        }
-        else if (currToken->type == COMMAND && tree != NULL) 
-        {
-            lastAdded = create_ast(NODE_COMMAND);
-            if (tree->type == NODE_PIPE)
-                tree->right = lastAdded;
-            //else clear tree and token list and exit with error
-        }
-        else if (currToken->type == PIPE)
-        {
-            tree = create_ast(NODE_PIPE);
-            tree->left = prevRoot;
-            prevRoot = tree;
-            lastAdded = tree;
-        }
-        else if (currToken->type == REDIR_APPEND || currToken->type == REDIR_IN || currToken->type == REDIR_OUT) {
-            if (assign_to_node(lastAdded,currNode) == -1)
-                return -1;
-            else
-                currNode = currNode->next;
-        }
-        else
-            assign_to_node(lastAdded, currNode);
-        currNode = currNode->next;
-    }
-    return 0;
-}
+//     currNode = list;
+//     while (currNode != NULL)
+//     {
+//         currToken = currNode->val;
+//         if (currToken->type == COMMAND && tree == NULL)
+//         {
+//             tree = create_ast(NODE_COMMAND);
+//             prevRoot = tree;
+//             lastAdded = tree;
+//         }
+//         else if (currToken->type == COMMAND && tree != NULL) 
+//         {
+//             lastAdded = create_ast(NODE_COMMAND);
+//             if (tree->type == NODE_PIPE)
+//                 tree->right = lastAdded;
+//             //else clear tree and token list and exit with error
+//         }
+//         else if (currToken->type == PIPE)
+//         {
+//             tree = create_ast(NODE_PIPE);
+//             tree->left = prevRoot;
+//             prevRoot = tree;
+//             lastAdded = tree;
+//         }
+//         else if (currToken->type == REDIR_APPEND || currToken->type == REDIR_IN || currToken->type == REDIR_OUT) {
+//             if (assign_to_node(lastAdded,currNode) == -1)
+//                 return -1;
+//             else
+//                 currNode = currNode->next;
+//         }
+//         else
+//             assign_to_node(lastAdded, currNode);
+//         currNode = currNode->next;
+//     }
+//     return 0;
+// }

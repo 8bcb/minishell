@@ -14,9 +14,9 @@ void _unclosed_quotes_error()
 
 void _invalid_redirection_error() 
 {
-    printf("Invalid sign after redirection operand");
+    printf("Invalid sign after redirection operand\n");
 }
 
 void _invalid_input() {
-    printf("Provided input is incorrect");
+    printf("Provided input is incorrect\n");
 }

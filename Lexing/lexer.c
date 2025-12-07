@@ -42,11 +42,10 @@ int isValidAssignment(char *str)
 	return hasEqualsSign == 0 ? 0 : isValid;
 }
 
-s_node* scanInput(char* input, int* isAssignment)
+s_node* tokenizing(char* input, int* isAssignment)
 {
 	s_node *head;
 	int i = 0;
-	int commandExist = 0;
 	char* trimmed;
 	int increment;
 
@@ -57,25 +56,26 @@ s_node* scanInput(char* input, int* isAssignment)
 	if (*isAssignment == 1 || *isAssignment == -1)
 		return NULL;
 	while (trimmed[i]) { 
-		if (trimmed[i] == 34 || trimmed[i] == 39) {
-			increment = t_argument(trimmed, &head, i);
-			if (increment == -1)
-				return NULL;
-			i += increment;
-		}
+		if (trimmed[i] == 34 || trimmed[i] == 39)
+			increment = t_quoted_argument(trimmed, &head, i, trimmed[i]);
 		else if (trimmed[i] == '<' || trimmed[i] == '>')
-			i += t_redirection(trimmed, &head, i);
+			increment = t_redirection(trimmed, &head, i);
 		else if (trimmed[i] == '|')
-			i += t_pipe(&head, &commandExist);
-		else if (isWhiteSpace(trimmed[i]) == 0) {
-			if (commandExist == 1)
-				i += t_argument(trimmed, &head, i);
-			else
-				i += t_command(trimmed, &head, i, &commandExist);
-		}
+			increment = t_pipe(&head);
+		else if (isWhiteSpace(trimmed[i]) == 0)
+			increment = t_argument(trimmed, &head, i);
 		else if (isWhiteSpace(trimmed[i]) == 1)
-			i++;
+			increment = 1;
+		
+		if (increment == -1)
+		{
+			free_list(&head);
+			free(trimmed);
+			return NULL;
+		}
+		i += increment;
 	}
+	free(trimmed);
 	return head;
 }
 

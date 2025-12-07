@@ -81,27 +81,24 @@ int main(void)
 {
 	char *rl;
 	s_node* head;
-	t_ast* tree;
+	//t_ast* tree;
 	int isAssignment;
 
-	tree = NULL;
+	//tree = NULL;
 	head = NULL;
 	isAssignment = 0;
 	while (1) {
 		rl = readline("Prompt > ");
-		head = scanInput(rl, &isAssignment);
+		head = tokenizing(rl, &isAssignment);
 		//if (isAssignment == 1)
 			//variables = add_env_variable(rl);
 		if (isAssignment == -1)
-			return -1;
+			continue;
 		if (head != NULL) {
 			print_list(head);
-			read_list(head, tree);
+			//parse(head, tree);
 		}
+		free(rl);
 		free_list(&head);
-		if (head != NULL)
-			print_list(head);
-		else
-			printf("Clean after execution\n");
 	}
 }

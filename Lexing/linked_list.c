@@ -28,8 +28,7 @@ void free_list(s_node **list) {
 	while (*list != NULL) {
 		tmp = *list;
 		*list = (*list)->next;
-		if (tmp->val->type != PIPE)
-			free(tmp->val->value);
+		free(tmp->val->value);
 		free(tmp->val);
 		free(tmp);
 	}
