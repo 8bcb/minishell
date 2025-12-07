@@ -90,16 +90,18 @@ int main(void)
 	while (1) {
 		rl = readline("Prompt > ");
 		head = scanInput(rl, &isAssignment);
-		//if isAssignment == 1 add variable to list of varaibles
-		if (head != NULL)
+		//if (isAssignment == 1)
+			//variables = add_env_variable(rl);
+		if (isAssignment == -1)
+			return -1;
+		if (head != NULL) {
 			print_list(head);
-		//free memory and exit if head == NULL
-		read_list(head, tree);
-		printf("check\n");
+			read_list(head, tree);
+		}
 		free_list(&head);
 		if (head != NULL)
 			print_list(head);
 		else
-			printf("NULL\n");
+			printf("Clean after execution\n");
 	}
 }

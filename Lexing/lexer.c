@@ -42,18 +42,6 @@ int isValidAssignment(char *str)
 	return hasEqualsSign == 0 ? 0 : isValid;
 }
 
-void t_assignment(char* str, s_node **head)
-{
-	Token* newToken;
-
-	newToken = malloc(sizeof(Token));
-	if (!newToken)
-		return ;
-	newToken->type = ASSIGNMENT;
-	newToken->value = str;
-	add_node(head, &newToken);
-}
-
 s_node* scanInput(char* input, int* isAssignment)
 {
 	s_node *head;
@@ -67,11 +55,7 @@ s_node* scanInput(char* input, int* isAssignment)
 	*isAssignment = isValidAssignment(trimmed);
 	increment = 0;
 	if (*isAssignment == 1 || *isAssignment == -1)
-	{
-		if (*isAssignment == 1)
-			t_assignment(trimmed, &head);
 		return NULL;
-	}
 	while (trimmed[i]) { 
 		if (trimmed[i] == 34 || trimmed[i] == 39) {
 			increment = t_argument(trimmed, &head, i);
@@ -89,7 +73,8 @@ s_node* scanInput(char* input, int* isAssignment)
 			else
 				i += t_command(trimmed, &head, i, &commandExist);
 		}
-		i++;
+		else if (isWhiteSpace(trimmed[i]) == 1)
+			i++;
 	}
 	return head;
 }

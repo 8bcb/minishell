@@ -16,3 +16,7 @@ void _invalid_redirection_error()
 {
     printf("Invalid sign after redirection operand");
 }
+
+void _invalid_input() {
+    printf("Provided input is incorrect");
+}

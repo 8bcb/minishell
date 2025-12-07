@@ -89,5 +89,6 @@ int read_list(s_node* list, t_ast* tree);
 void _invalid_assignment_error();
 void _unclosed_quotes_error();
 void _invalid_redirection_error();
+void _invalid_input();
 
 #endif

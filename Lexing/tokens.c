@@ -33,10 +33,11 @@ int t_argument(char* input, s_node** list, int start)
 		openQuote = input[i];
 		i++;
 	}
-	while (input[i] && isWhiteSpace(input[i]) != 1) 
-	{
-		if (openQuote != 0 && input[i] == openQuote)
-			openQuote = 0;
+	while (input[i] && ((openQuote == 0 && isWhiteSpace(input[i]) != 1) 
+		|| (openQuote != 0 && input[i] != openQuote))) 
+		i++;
+	if (openQuote != 0 && input[i] == openQuote) {
+		openQuote = 0;
 		i++;
 	}
 	if (openQuote != 0) {
@@ -79,7 +80,7 @@ int t_redirection(char *input, s_node **list, int start)
 				newToken->type = HEREDOC;
 			else
 				newToken->type = REDIR_APPEND;
-			newToken->value = ft_substr(input, start, 3);
+			newToken->value = ft_substr(input, start, 2);
 		}
 		else if (isWhiteSpace(oneAhead) == 1)
 		{
@@ -87,7 +88,7 @@ int t_redirection(char *input, s_node **list, int start)
 				newToken->type = REDIR_IN;
 			else
 				newToken->type = REDIR_OUT;
-			newToken->value = ft_substr(input, start, 2);
+			newToken->value = ft_substr(input, start, 1);
 		} 
 		else
 			_invalid_redirection_error();
