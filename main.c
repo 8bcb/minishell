@@ -81,10 +81,10 @@ int main(void)
 {
 	char *rl;
 	s_node* head;
-	//t_ast* tree;
+	t_ast* tree;
 	int isAssignment;
 
-	//tree = NULL;
+	tree = NULL;
 	head = NULL;
 	isAssignment = 0;
 	while (1) {
@@ -96,7 +96,9 @@ int main(void)
 			continue;
 		if (head != NULL) {
 			print_list(head);
-			//parse(head, tree);
+			tree = parsing(&head);
+			print_tree(tree, 0);
+			//free tree
 		}
 		free(rl);
 		free_list(&head);

@@ -85,11 +85,18 @@ int t_redirection(char *input, s_node **list, int start);
 
 s_node* tokenizing(char* input, int* isAssignment);
 
-//int read_list(s_node* list, t_ast* tree);
-
 void _invalid_assignment_error();
 void _unclosed_quotes_error();
 void _invalid_redirection_error();
 void _invalid_input();
+
+t_ast* parsing(s_node** tokens);
+
+t_ast* create_command_node();
+t_ast* create_pipe_node(t_ast* left, t_ast* right);
+void print_tree(t_ast* tree, int depth);
+
+int _too_many_args_error();
+int _invalid_syntax_error();
 
 #endif
