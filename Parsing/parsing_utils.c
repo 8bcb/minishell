@@ -14,6 +14,7 @@ t_ast* create_command_node()
         free(node);
         return NULL;
     }
+    node->heredoc_fd = -1;
     return node;
 }
 
@@ -27,6 +28,7 @@ t_ast* create_pipe_node(t_ast* left, t_ast* right)
     node->type = NODE_PIPE;
     node->left = left;
     node->right = right;
+    node->heredoc_fd = -1;
     return node;
 }
 

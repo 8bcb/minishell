@@ -5,102 +5,70 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/27 12:35:00 by asia              #+#    #+#             */
-/*   Updated: 2025/12/08 08:23:41 by asia             ###   ########.fr       */
+/*   Created: 2025/12/08 10:00:00 by asia              #+#    #+#             */
+/*   Updated: 2025/12/19 08:51:59 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-//#include "execution/exec.h"
-//#include "./test_node.c"
+#include "execution/exec.h"
+#include "env_utils.h"
+#include "signals.h"
 
-// TODO: remove - only for dev purposes
-// int free_node(t_ast *n)
-// {
-//     int i = 0;
-
-//     if (!n) return 0;
-
-//     if (n->argv) {
-//         while (n->argv[i]) free(n->argv[i++]);
-//         free(n->argv);
-//     }
-//     if (n->infile) {
-//         if (n->infile[0]) free(n->infile[0]);
-//         free(n->infile);
-//     }
-//     if (n->outfile) {
-//         if (n->outfile[0]) free(n->outfile[0]);
-//         free(n->outfile);
-//     }
-//     free(n);
-//     return 1;
-// }
-
-// int main(void) 
-// {
-// 	char	*rl;
-// 	int		exit_status;
-	
-// 	while (1) {
-// 		char prompt_buf[64];
-//         // Show status in the prompt when interactive; stay silent when piped
-//         if (isatty(STDIN_FILENO))
-//             snprintf(prompt_buf, sizeof(prompt_buf), "minishell[%d]> ", exit_status);
-//         else
-//             prompt_buf[0] = '\0';
-// 		rl = readline(prompt_buf);
-// 		if (!rl) break;
-// 		if (*rl) add_history(rl);
-// 		char	**argv;
-// 		t_ast	*node;
-
-// 		argv = ft_split(rl, ' ');
-// 		if (argv && argv[0])
-// 		{
-// 			node = build_mock_ast_from_argv(argv);
-// 			if (node)
-// 			{
-// 				exit_status = exec_ast(node, NULL);
-// 		/* TODO: free full AST here (commands + pipes) */
-// 		/* free_ast(node); */
-// 			}
-// 		}
-// 		else
-// 			free(argv);
-// 		free(rl);
-// 		// scanInput(rl);
-// 		//parseInput
-// 		//execute
-// 	}
-// 	return exit_status;
-// }
-
-//lexing/parsing main
-int main(void) 
+int	main(int argc, char **argv, char **envp)
 {
-	char *rl;
-	s_node* head;
-	t_ast* tree;
-	int isAssignment;
+	char    *rl;
+	char    prompt_buf[64];
+	int     exit_status;
+	t_env   *env;
+	s_node  *head;
+	t_ast   *tree;
+	int     isAssignment;
 
-	tree = NULL;
-	head = NULL;
-	isAssignment = 0;
-	while (1) {
-		rl = readline("Prompt > ");
+	(void)argc;
+	(void)argv;
+	exit_status = 0;
+	env = env_init(envp);
+	setup_interactive_signals();
+
+	while (1)
+	{
+		if (isatty(STDIN_FILENO))
+			snprintf(prompt_buf, sizeof(prompt_buf),
+				"Prompt[%d]> ", exit_status);
+		else
+			prompt_buf[0] = '\0';
+
+		rl = readline(prompt_buf);
+		if (!rl)
+			break;
+
+		if (*rl)
+			add_history(rl);
+
+		head = NULL;
+		isAssignment = 0;
 		head = tokenizing(rl, &isAssignment);
-		//if (isAssignment == 1)
-			//variables = add_env_variable(rl);
+
 		if (isAssignment == -1)
+		{
+			free(rl);
 			continue;
-		if (head != NULL) {
+		}
+
+		if (head != NULL)
+		{
 			print_list(head);
 			tree = parsing(&head);
 			print_tree(tree, 0);
-			//free tree
+			if (tree != NULL)
+			{
+				exit_status = exec_ast(tree, env);
+				free_ast(tree);
+			}
 		}
+
 		free(rl);
-		free_list(&head);
 	}
+	return (exit_status);
 }
