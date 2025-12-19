@@ -10,11 +10,14 @@ LIBFT       := $(LIBFT_DIR)/libft.a
 
 SRCS        := \
 	main.c \
-	Lexing/lexer.c \
 	Lexing/utils.c \
+	Lexing/lexer.c \
 	Lexing/linked_list.c \
 	Lexing/tokens.c \
 	Lexing/errors.c \
+	Parsing/parsing.c \
+	Parsing/parsing_errors.c \
+	Parsing/parsing_utils.c \
 	execution/exec_ast.c \
 	execution/exec_command.c \
 	execution/exec_pipeline.c \
