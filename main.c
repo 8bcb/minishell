@@ -5,74 +5,70 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/27 12:35:00 by asia              #+#    #+#             */
-/*   Updated: 2025/12/03 08:54:58 by asia             ###   ########.fr       */
+/*   Created: 2025/12/08 10:00:00 by asia              #+#    #+#             */
+/*   Updated: 2025/12/19 08:51:59 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "execution/exec.h"
 #include "env_utils.h"
 #include "signals.h"
-#include "./test_node.c"
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*rl;
-	int		exit_status;
-	t_env	*env;
-	char	prompt_buf[64];
-	char	**argv_split;
-	t_ast	*node;
+	char    *rl;
+	char    prompt_buf[64];
+	int     exit_status;
+	t_env   *env;
+	s_node  *head;
+	t_ast   *tree;
+	int     isAssignment;
 
 	(void)argc;
 	(void)argv;
 	exit_status = 0;
 	env = env_init(envp);
 	setup_interactive_signals();
+
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
 			snprintf(prompt_buf, sizeof(prompt_buf),
-				"minishell[%d]> ", exit_status);
+				"Prompt[%d]> ", exit_status);
 		else
 			prompt_buf[0] = '\0';
+
 		rl = readline(prompt_buf);
 		if (!rl)
-			break ;
+			break;
+
 		if (*rl)
 			add_history(rl);
-		argv_split = ft_split(rl, ' ');
-		if (argv_split && argv_split[0])
+
+		head = NULL;
+		isAssignment = 0;
+		head = tokenizing(rl, &isAssignment);
+
+		if (isAssignment == -1)
 		{
-			node = build_mock_ast_from_argv(argv_split);
-			if (node)
-				exit_status = exec_ast(node, env);
-				free_ast(node);
+			free(rl);
+			continue;
 		}
-		else
-			free(argv_split);
+
+		if (head != NULL)
+		{
+			print_list(head);
+			tree = parsing(&head);
+			print_tree(tree, 0);
+			if (tree != NULL)
+			{
+				exit_status = exec_ast(tree, env);
+				free_ast(tree);
+			}
+		}
+
 		free(rl);
 	}
 	return (exit_status);
 }
-
-//lexing/parsing main
-// int main(void) 
-// {
-// 	char *rl;
-// 	s_node *head;
-// 	int status;
-
-// 	status = 0;
-// 	head = (s_node *)malloc(sizeof(s_node));
-// 	if (!head)
-// 		return 1;
-// 	printf("Head: %s\n", head->val.value);
-// 	while (1) {
-// 		rl = readline("Prompt > ");
-// 		status = scanInput(rl, head);
-// 		//if (status == -1)
-// 			//free memory and exit
-// 		printList(head);
-// 	}
-// }
