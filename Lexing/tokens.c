@@ -21,39 +21,35 @@ int t_argument(char* input, s_node** list, int start)
 {
 	int i;
 	Token* newToken;
-	char* tmpArg;
-	char* newArg;
-	char* newPart;
+	char* buffer;
+	char* part;
+	int buf_i;
 
 	newToken = malloc(sizeof(Token));
-	if (!newToken)
+	buffer = calloc(ft_strlen(&(input[start])) + 1, sizeof(char));
+	if (!newToken || !buffer)
 		return - 1;
+	buf_i = 0;
 	i = start;
-	newArg = ft_strdup("");
 	while (input[i] && !(isWhiteSpace(input[i]) == 1 || isSeparator(input[i]) == 1))
 	{
-		tmpArg = newArg;
 		if (input[i] == 34 || input[i] == 39)
 		{
-			newPart = add_quoted_part(input, &i);
-			if (!newPart)
+			part = add_quoted_part(input, &i);
+			if (!part)
 			{
-				free(newArg);
+				free(buffer);
 				free(newToken);
-				return _unclosed_quotes_error;
+				return _unclosed_quotes_error();
 			}
-			newArg = ft_strjoin(tmpArg, newPart);
+			ft_memcpy(buffer + buf_i, part, ft_strlen(part));
+			buf_i += ft_strlen(part);
+			free(part);
 		}
 		else
-		{
-			newPart = ft_substr(input, i, 1);
-			newArg = ft_strjoin(tmpArg, newPart);
-			i++;
-		}
-		free(tmpArg);
-		free(newPart);
+			buffer[buf_i++] = input[i++];
 	}
-	newToken->value = newArg;
+	newToken->value = buffer;
 	newToken->type = WORD;
 	add_node(list, &newToken);
 	return i - start;
@@ -90,8 +86,7 @@ int t_redirection(char *input, s_node **list, int start)
 			newToken->type = REDIR_APPEND;
 		newToken->value = ft_substr(input, start, 2);
 	}
-	else if (ft_isalnum(oneAhead) == 1 || oneAhead == 34 || oneAhead == 39 
-		|| isWhiteSpace(oneAhead) == 1 || oneAhead == '_' || oneAhead == '.')
+	else 
 	{
 		if (current == '<')
 			newToken->type = REDIR_IN;
@@ -99,10 +94,9 @@ int t_redirection(char *input, s_node **list, int start)
 			newToken->type = REDIR_OUT;
 		newToken->value = ft_substr(input, start, 1);
 	} 
-	else {
-		_invalid_redirection_error();
+	if (!newToken->value) {
 		free(newToken);
-		return -1;
+		return _invalid_redirection_error();
 	}
 	add_node(list, &newToken);
 	return ft_strlen(newToken->value);

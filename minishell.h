@@ -85,9 +85,9 @@ int t_redirection(char *input, s_node **list, int start);
 
 s_node* tokenizing(char* input, int* isAssignment);
 
-void _invalid_assignment_error();
-void _unclosed_quotes_error();
-void _invalid_redirection_error();
+int _invalid_assignment_error();
+int _unclosed_quotes_error();
+int _invalid_redirection_error();
 void _invalid_input();
 
 t_ast* parsing(s_node** tokens);

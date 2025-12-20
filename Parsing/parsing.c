@@ -36,33 +36,31 @@ int assign_redirection(s_node** tokens, t_ast** node)
     t_token_type type;
     char* file;
     int success;
-    
+
     type = (*tokens)->val->type;
-    if ((*tokens)->next != NULL)
-        file = ft_strdup((*tokens)->next->val->value);
-    else
-        return _invalid_syntax_error();
     success = 0;
-    if (!file)
-        return -1;
-    if (type == REDIR_IN && (*tokens)->next->val->type == WORD) {
-        success = update_redir_list(&((*node)->infile), &file);
-         *tokens = (*tokens)->next;
-    }
-    else if ((type == REDIR_OUT || type == REDIR_APPEND) && (*tokens)->next->val->type == WORD)
+    if ((*tokens)->next && (*tokens)->next->val->type == WORD)
     {
-        success = update_redir_list(&((*node)->outfile), &file);
-        if (type == REDIR_APPEND)
-            (*node)->append = 1;
+        file = ft_strdup((*tokens)->next->val->value);
+        if (!file)
+            return -1;
+        if (type == REDIR_IN)
+            success = update_redir_list(&((*node)->infile), &file);
+        else
+        {
+            success = update_redir_list(&((*node)->outfile), &file);
+            if (type == REDIR_APPEND)
+                (*node)->append = 1;
+        }
+        if (success == -1)
+        {
+            free(file);
+            return _redirection_error();
+        }
         *tokens = (*tokens)->next;
     }
     else 
         return _invalid_syntax_error();
-    if (success == -1)
-    {
-        free(file);
-        return _redirection_error();
-    }
     //heredoc to be added
     return 1;
 }
@@ -88,7 +86,6 @@ t_ast* command_parser(s_node** tokens)
             success = assign_redirection(tokens, &newNode);
         else
         {
-            _invalid_syntax_error();
             free_tree(&newNode);
             return NULL;
         }
@@ -107,6 +104,11 @@ t_ast* pipeline_parser(s_node** tokens)
     t_ast* left;
     t_ast* right;
 
+    if ((*tokens)->val->type == PIPE)
+    {
+        _invalid_syntax_error();
+        return NULL;
+    }
     left = command_parser(tokens);
     if (!left)
         return NULL;
@@ -117,6 +119,7 @@ t_ast* pipeline_parser(s_node** tokens)
         (*tokens) = (*tokens)->next;
         right = command_parser(tokens);
         if (right == NULL) {
+            _invalid_syntax_error();
             free_tree(&left);
             return NULL;
         }

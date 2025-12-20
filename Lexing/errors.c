@@ -2,9 +2,10 @@
 
 #include "../minishell.h"
 
-void _invalid_assignment_error() 
+int _invalid_assignment_error() 
 {
-    printf("Invalid sign in assignment\n");
+    printf("Invalid assignment\n");
+    return -1;
 }
 
 int _unclosed_quotes_error() 
@@ -13,9 +14,10 @@ int _unclosed_quotes_error()
     return -1;
 }
 
-void _invalid_redirection_error() 
+int _invalid_redirection_error() 
 {
     printf("Invalid sign after redirection operand\n");
+    return -1;
 }
 
 void _invalid_input() {

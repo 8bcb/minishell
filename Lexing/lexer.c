@@ -14,32 +14,37 @@
 
 int isValidAssignment(char *str) 
 {
-	int hasEqualsSign;
+	int equalsCount;
 	int openQuote;
-	int hasInvalidCharacters;
-	int isValid;
 
-	hasEqualsSign = 0;
+	equalsCount = 0;
 	openQuote = 0;
-	hasInvalidCharacters = 0;
-	if (ft_isalpha(*str) == 0 && *str != '_')
+	if (!ft_isalpha(*str) && *str != '_')
 		return 0;
 	while (*str) 
 	{
 		if (openQuote == 0 && *str == '=')
-			hasEqualsSign++;
+		{
+			equalsCount++;
+			if (equalsCount > 1)
+				return -1;
+		}
 		else if (((*str == 34 || *str == 39) && openQuote == 0 ) || (*str == openQuote && openQuote != 0))
 			openQuote = (openQuote == 0 ? *str : 0);
 		else if (openQuote == 0 && isWhiteSpace(*str) == 1)
-			hasInvalidCharacters = 1;
+		{
+			if (equalsCount == 0)
+				return 0;
+			else
+				return _invalid_assignment_error();
+		}
 		str++;
 	}
-	isValid = ((hasEqualsSign == 1 && openQuote != 0) || (hasEqualsSign == 1 && hasInvalidCharacters == 1)) ? -1 : 1;
-	if (hasEqualsSign == 1 && openQuote != 0)
-		_unclosed_quotes_error();
-	if (hasEqualsSign == 1 && hasInvalidCharacters == 1)
-		_invalid_assignment_error();
-	return hasEqualsSign == 0 ? 0 : isValid;
+	if (openQuote != 0)
+		return _unclosed_quotes_error();
+	if (equalsCount == 1)
+		return 1;
+	return 0;
 }
 
 s_node* tokenizing(char* input, int* isAssignment)
