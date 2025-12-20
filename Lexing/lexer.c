@@ -78,4 +78,3 @@ s_node* tokenizing(char* input, int* isAssignment)
 	free(trimmed);
 	return head;
 }
-

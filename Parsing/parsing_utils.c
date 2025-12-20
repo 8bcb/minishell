@@ -30,6 +30,38 @@ t_ast* create_pipe_node(t_ast* left, t_ast* right)
     return node;
 }
 
+void free_str_arr(char** arr)
+{
+    int i;
+
+    i = 0;
+    if (!arr)
+        return;
+    while (arr[i])
+    {
+       free(arr[i]);
+       i++;
+    }
+    free(arr);
+}
+
+void free_tree(t_ast** tree)
+{
+    t_ast *node;
+    if (!tree || !*tree)
+        return;
+    node = *tree;
+    free_tree(&node->left);
+    free_tree(&node->right);
+    free_str_arr((*tree)->argv);
+    free_str_arr((*tree)->infile);
+    free_str_arr((*tree)->outfile);
+    if (node->heredoc_tmp)
+        free(node->heredoc_tmp);
+    free(node);
+    *tree = NULL;
+}
+
 void print_tree(t_ast* tree, int depth)
 {
     int i = 0;

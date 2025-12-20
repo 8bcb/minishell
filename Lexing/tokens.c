@@ -1,23 +1,5 @@
 #include "../minishell.h"
 
-// int t_command(char* input, s_node **list, int start, int *commandFlag)
-// {
-// 	int i = start;
-// 	Token* newToken;
-
-// 	newToken = malloc(sizeof(Token));
-// 	if (!newToken)
-// 		return - 1;
-// 	*commandFlag = 1;
-// 	newToken->type = COMMAND;
-// 	while (input[i] && isWhiteSpace(input[i]) != 1) {
-// 		i++;
-// 	}
-// 	newToken->value = ft_substr(input, start, i - start);
-// 	add_node(list, &newToken);
-// 	return i - start;
-// }
-
 int t_quoted_argument(char *input, s_node** list, int start, int quoteType)
 {
 	Token* newToken;

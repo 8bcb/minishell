@@ -90,6 +90,7 @@ int main(void)
 	while (1) {
 		rl = readline("Prompt > ");
 		head = tokenizing(rl, &isAssignment);
+		free(rl);
 		//if (isAssignment == 1)
 			//variables = add_env_variable(rl);
 		if (isAssignment == -1)
@@ -100,7 +101,5 @@ int main(void)
 			print_tree(tree, 0);
 			//free tree
 		}
-		free(rl);
-		free_list(&head);
 	}
 }

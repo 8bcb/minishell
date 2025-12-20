@@ -94,9 +94,12 @@ t_ast* parsing(s_node** tokens);
 
 t_ast* create_command_node();
 t_ast* create_pipe_node(t_ast* left, t_ast* right);
+void free_str_arr(char** arr);
+void free_tree(t_ast** tree);
 void print_tree(t_ast* tree, int depth);
 
 int _too_many_args_error();
 int _invalid_syntax_error();
+int _redirection_error();
 
 #endif
