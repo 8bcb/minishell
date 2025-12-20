@@ -7,9 +7,10 @@ void _invalid_assignment_error()
     printf("Invalid sign in assignment\n");
 }
 
-void _unclosed_quotes_error() 
+int _unclosed_quotes_error() 
 {
     printf("Unclosed quotes\n");
+    return -1;
 }
 
 void _invalid_redirection_error() 

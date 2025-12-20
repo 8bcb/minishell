@@ -1,40 +1,59 @@
 #include "../minishell.h"
 
-int t_quoted_argument(char *input, s_node** list, int start, int quoteType)
-{
-	Token* newToken;
-	int i;
+char* add_quoted_part(char* input, int* i) {
+	int iter;
+	int quote;
+	int start;
 
-	newToken = malloc(sizeof(Token));
-	if (!newToken)
-		return -1;
-	i = start + 1;
-	while (input[i] && input[i] != quoteType)
-		i++;
-	if (input[i] != quoteType)
-	{
-		_unclosed_quotes_error();
-		free(newToken);
-		return -1;
-	}
-	newToken->value = ft_substr(input, start + 1, i - start - 1);
-	newToken->type = WORD;
-	add_node(list, &newToken);
-	return i + 1 - start;
+	start = *i + 1;
+	iter = *i;
+	quote = input[iter];
+	iter++;
+	while (input[iter] && input[iter] != quote)
+		iter++;
+	if (input[iter] != quote)
+		return NULL;
+	*i = iter + 1;
+	return ft_substr(input, start, iter - start);
 }
 
 int t_argument(char* input, s_node** list, int start) 
 {
 	int i;
 	Token* newToken;
+	char* tmpArg;
+	char* newArg;
+	char* newPart;
 
 	newToken = malloc(sizeof(Token));
 	if (!newToken)
 		return - 1;
 	i = start;
-	while (input[i] && !(isWhiteSpace(input[i]) == 1 || isSeparator(input[i]) == 1)) 
-		i++;
-	newToken->value = ft_substr(input, start, i - start);
+	newArg = ft_strdup("");
+	while (input[i] && !(isWhiteSpace(input[i]) == 1 || isSeparator(input[i]) == 1))
+	{
+		tmpArg = newArg;
+		if (input[i] == 34 || input[i] == 39)
+		{
+			newPart = add_quoted_part(input, &i);
+			if (!newPart)
+			{
+				free(newArg);
+				free(newToken);
+				return _unclosed_quotes_error;
+			}
+			newArg = ft_strjoin(tmpArg, newPart);
+		}
+		else
+		{
+			newPart = ft_substr(input, i, 1);
+			newArg = ft_strjoin(tmpArg, newPart);
+			i++;
+		}
+		free(tmpArg);
+		free(newPart);
+	}
+	newToken->value = newArg;
 	newToken->type = WORD;
 	add_node(list, &newToken);
 	return i - start;

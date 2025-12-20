@@ -55,18 +55,16 @@ s_node* tokenizing(char* input, int* isAssignment)
 	increment = 0;
 	if (*isAssignment == 1 || *isAssignment == -1)
 		return NULL;
-	while (trimmed[i]) { 
-		if (trimmed[i] == 34 || trimmed[i] == 39)
-			increment = t_quoted_argument(trimmed, &head, i, trimmed[i]);
-		else if (trimmed[i] == '<' || trimmed[i] == '>')
+	while (trimmed[i])
+	{
+		if (trimmed[i] == '<' || trimmed[i] == '>')
 			increment = t_redirection(trimmed, &head, i);
 		else if (trimmed[i] == '|')
 			increment = t_pipe(&head);
-		else if (isWhiteSpace(trimmed[i]) == 0)
+		else if (isWhiteSpace(trimmed[i]) == 0 || trimmed[i] == 34 || trimmed[i] == 39)
 			increment = t_argument(trimmed, &head, i);
 		else if (isWhiteSpace(trimmed[i]) == 1)
 			increment = 1;
-		
 		if (increment == -1)
 		{
 			free_list(&head);

@@ -9,7 +9,7 @@ int isWhiteSpace(char c)
 
 int isSeparator(char c)
 {
-	if (c == '|' || c == '<' || c == '>' || c == 34 || c == 39)
+	if (c == '|' || c == '<' || c == '>')
 		return 1;
 	return 0;
 }
