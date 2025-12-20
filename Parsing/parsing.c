@@ -46,6 +46,11 @@ int assign_redirection(s_node** tokens, t_ast** node)
             return -1;
         if (type == REDIR_IN)
             success = update_redir_list(&((*node)->infile), &file);
+        else if (type == HEREDOC)
+        {
+            (*node)->heredoc = 1;
+            (*node)->heredoc_tmp = file;
+        }
         else
         {
             success = update_redir_list(&((*node)->outfile), &file);
@@ -61,7 +66,6 @@ int assign_redirection(s_node** tokens, t_ast** node)
     }
     else 
         return _invalid_syntax_error();
-    //heredoc to be added
     return 1;
 }
 

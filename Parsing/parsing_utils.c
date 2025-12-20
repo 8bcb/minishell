@@ -65,6 +65,8 @@ void free_tree(t_ast** tree)
 void print_tree(t_ast* tree, int depth)
 {
     int i = 0;
+    int j = 0;
+    int k = 0;
 
     if (tree == NULL)
         return;
@@ -75,6 +77,21 @@ void print_tree(t_ast* tree, int depth)
         {
             printf("Arg %d: %s\n", i, tree->argv[i]);
             i++;
+        }
+        if (tree->heredoc)
+        printf("Heredoc flag: %d\n", tree->heredoc);
+        if (tree->heredoc_tmp)
+            printf("Heredoc delimiter: %s\n", tree->heredoc_tmp);
+        printf("Append flag: %d\n", tree->append);
+        while (tree->infile && tree->infile[j])
+        {
+            printf("Infile %d: %s\n", j, tree->infile[j]);
+            j++;
+        }
+        while (tree->outfile && tree->outfile[k])
+        {
+            printf("Outfile %d: %s\n", k, tree->outfile[k]);
+            k++;
         }
     }
     print_tree(tree->left, depth + 1);
