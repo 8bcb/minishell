@@ -69,29 +69,32 @@ typedef struct s_node{
 	struct s_node *next;
 } s_node;
 
-int isWhiteSpace(char c);
-int isSeparator(char c);
-int valid_first_sign(char c);
-char* trim(char *input);
-
-void add_node(s_node** list, Token **newToken);
-void free_list(s_node **list);
-void print_list(s_node *head);
-
-//int t_command(char* input, s_node **list, int start, int *commandFlag);
-int t_quoted_argument(char *input, s_node** list, int start, int quoteType);
-int t_argument(char* input, s_node **list, int start);
-int t_pipe(s_node **list);
-int t_redirection(char *input, s_node **list, int start);
-
-s_node* lexing(char* input, int* isAssignment);
-
 int _invalid_assignment_error();
 int _unclosed_quotes_error();
 int _invalid_redirection_error();
 void _invalid_input();
 
-t_ast* parsing(s_node** tokens);
+int isWhiteSpace(char c);
+int isSeparator(char c);
+int valid_first_sign(char c);
+char* trim(char *input);
+char* add_quoted_part(char* input, int* i);
+int add_to_buffer(char* input, char** buffer, int* i);
+void set_redir_token_values(char* input, Token** token, int start);
+
+void add_node(s_node** list, Token **newToken);
+void free_list(s_node **list);
+void print_list(s_node *head);
+
+int t_word(char* input, s_node **list, int start);
+int t_pipe(s_node **list);
+int t_redirection(char *input, s_node **list, int start);
+
+s_node* lexing(char* input, int* isAssignment);
+
+int _too_many_args_error();
+int _invalid_syntax_error();
+int _redirection_error();
 
 t_ast* create_command_node();
 t_ast* create_pipe_node(t_ast* left, t_ast* right);
@@ -99,8 +102,6 @@ void free_str_arr(char** arr);
 void free_tree(t_ast** tree);
 void print_tree(t_ast* tree, int depth);
 
-int _too_many_args_error();
-int _invalid_syntax_error();
-int _redirection_error();
+t_ast* parsing(s_node** tokens);
 
 #endif

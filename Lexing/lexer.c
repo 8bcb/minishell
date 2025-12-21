@@ -12,34 +12,44 @@
 
 #include "../minishell.h"
 
-int isValidAssignment(char *str) 
+int scan_for_assignment(char *str, int* equalsCount, int* openQuote)
 {
-	int equalsCount;
-	int openQuote;
-
-	equalsCount = 0;
-	openQuote = 0;
-	if (!ft_isalpha(*str) && *str != '_')
-		return 0;
 	while (*str) 
 	{
-		if (openQuote == 0 && *str == '=')
+		if (*openQuote == 0 && *str == '=')
 		{
-			equalsCount++;
-			if (equalsCount > 1)
-				return -1;
+			(*equalsCount)++;
+			if (*equalsCount > 1)
+				return _invalid_assignment_error();
 		}
-		else if (((*str == 34 || *str == 39) && openQuote == 0 ) || (*str == openQuote && openQuote != 0))
-			openQuote = (openQuote == 0 ? *str : 0);
-		else if (openQuote == 0 && isWhiteSpace(*str) == 1)
+		else if (((*str == 34 || *str == 39) && *openQuote == 0 ) 
+			|| (*str == *openQuote && *openQuote != 0))
+			*openQuote = (*openQuote == 0 ? *str : 0);
+		else if (*openQuote == 0 && isWhiteSpace(*str) == 1)
 		{
-			if (equalsCount == 0)
+			if (*equalsCount == 0)
 				return 0;
 			else
 				return _invalid_assignment_error();
 		}
 		str++;
 	}
+	return 1;
+}
+
+int is_valid_assignment(char *str) 
+{
+	int equalsCount;
+	int openQuote;
+	int scanResult;
+
+	equalsCount = 0;
+	openQuote = 0;
+	if (!ft_isalpha(*str) && *str != '_')
+		return 0;
+	scanResult = scan_for_assignment(str, &equalsCount, &openQuote);
+	if (scanResult != 1)
+		return scanResult;
 	if (openQuote != 0)
 		return _unclosed_quotes_error();
 	if (equalsCount == 1)
@@ -61,7 +71,7 @@ int tokenize_input(char* input, s_node** list)
 		else if (input[i] == '|')
 			increment = t_pipe(list);
 		else if (isWhiteSpace(input[i]) == 0 || input[i] == 34 || input[i] == 39)
-			increment = t_argument(input, list, i);
+			increment = t_word(input, list, i);
 		else if (isWhiteSpace(input[i]) == 1)
 			increment = 1;
 		if (increment == -1)
@@ -79,7 +89,7 @@ s_node* lexing(char* input, int* isAssignment)
 
 	head = NULL;
 	trimmed = trim(input);
-	*isAssignment = isValidAssignment(trimmed);
+	*isAssignment = is_valid_assignment(trimmed);
 	if (*isAssignment == 1 || *isAssignment == -1 || !valid_first_sign(trimmed[0]))
 	{
 		if (!valid_first_sign(trimmed[0]))
