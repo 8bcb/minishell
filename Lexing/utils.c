@@ -14,6 +14,13 @@ int isSeparator(char c)
 	return 0;
 }
 
+int valid_first_sign(char c)
+{
+	if (ft_isalpha(c) || c == '<' || c == '>')
+		return 1;
+	return 0;
+}
+
 char* trim(char *input)
 {
 	int len;

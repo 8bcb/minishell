@@ -89,7 +89,7 @@ int main(void)
 	isAssignment = 0;
 	while (1) {
 		rl = readline("Prompt > ");
-		head = tokenizing(rl, &isAssignment);
+		head = lexing(rl, &isAssignment);
 		free(rl);
 		//if (isAssignment == 1)
 			//variables = add_env_variable(rl);

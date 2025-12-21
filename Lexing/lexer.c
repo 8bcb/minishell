@@ -47,37 +47,52 @@ int isValidAssignment(char *str)
 	return 0;
 }
 
-s_node* tokenizing(char* input, int* isAssignment)
+int tokenize_input(char* input, s_node** list)
+{
+	int i;
+	int increment;
+
+	i = 0;
+	increment = 0;
+	while (input[i])
+	{
+		if (input[i] == '<' || input[i] == '>')
+			increment = t_redirection(input, list, i);
+		else if (input[i] == '|')
+			increment = t_pipe(list);
+		else if (isWhiteSpace(input[i]) == 0 || input[i] == 34 || input[i] == 39)
+			increment = t_argument(input, list, i);
+		else if (isWhiteSpace(input[i]) == 1)
+			increment = 1;
+		if (increment == -1)
+			return -1;
+		i += increment;
+	}
+	return 1;
+}
+
+s_node* lexing(char* input, int* isAssignment)
 {
 	s_node *head;
-	int i = 0;
 	char* trimmed;
-	int increment;
+	int success;
 
 	head = NULL;
 	trimmed = trim(input);
 	*isAssignment = isValidAssignment(trimmed);
-	increment = 0;
-	if (*isAssignment == 1 || *isAssignment == -1)
-		return NULL;
-	while (trimmed[i])
+	if (*isAssignment == 1 || *isAssignment == -1 || !valid_first_sign(trimmed[0]))
 	{
-		if (trimmed[i] == '<' || trimmed[i] == '>')
-			increment = t_redirection(trimmed, &head, i);
-		else if (trimmed[i] == '|')
-			increment = t_pipe(&head);
-		else if (isWhiteSpace(trimmed[i]) == 0 || trimmed[i] == 34 || trimmed[i] == 39)
-			increment = t_argument(trimmed, &head, i);
-		else if (isWhiteSpace(trimmed[i]) == 1)
-			increment = 1;
-		if (increment == -1)
-		{
-			free_list(&head);
-			free(trimmed);
-			return NULL;
-		}
-		i += increment;
+		if (!valid_first_sign(trimmed[0]))
+			_invalid_input();
+		free(trimmed);
+		return NULL;
 	}
+	success = tokenize_input(trimmed, &head);
 	free(trimmed);
+	if (success == -1)
+	{
+		free(head);
+		return NULL;
+	}
 	return head;
 }

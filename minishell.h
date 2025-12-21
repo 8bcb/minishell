@@ -71,6 +71,7 @@ typedef struct s_node{
 
 int isWhiteSpace(char c);
 int isSeparator(char c);
+int valid_first_sign(char c);
 char* trim(char *input);
 
 void add_node(s_node** list, Token **newToken);
@@ -83,7 +84,7 @@ int t_argument(char* input, s_node **list, int start);
 int t_pipe(s_node **list);
 int t_redirection(char *input, s_node **list, int start);
 
-s_node* tokenizing(char* input, int* isAssignment);
+s_node* lexing(char* input, int* isAssignment);
 
 int _invalid_assignment_error();
 int _unclosed_quotes_error();

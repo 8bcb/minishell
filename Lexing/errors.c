@@ -21,5 +21,5 @@ int _invalid_redirection_error()
 }
 
 void _invalid_input() {
-    printf("Provided input is incorrect\n");
+    printf("Command not found\n");
 }
