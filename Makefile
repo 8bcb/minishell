@@ -1,14 +1,15 @@
 NAME := mini
 SRC := main.c \
 Lexing/lexer.c \
-Lexing/utils.c \
-Lexing/utils2.c \
+Lexing/l_utils.c \
+Lexing/l_utils2.c \
 Lexing/linked_list.c \
 Lexing/tokens.c \
 Lexing/errors.c \
 Parsing/parsing.c \
 Parsing/parsing_errors.c \
-Parsing/parsing_utils.c \
+Parsing/p_utils.c \
+Parsing/p_utils2.c \
 execution/exec_ast.c \
 execution/exec_command.c \
 execution/exec_pipeline.c \

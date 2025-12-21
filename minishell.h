@@ -100,6 +100,9 @@ t_ast* create_command_node();
 t_ast* create_pipe_node(t_ast* left, t_ast* right);
 void free_str_arr(char** arr);
 void free_tree(t_ast** tree);
+int update_argv(char* str, t_ast** node);
+int update_redir_list(char*** list, char** str);
+int assign_redir_values(t_ast **node, char** file, t_token_type type);
 void print_tree(t_ast* tree, int depth);
 
 t_ast* parsing(s_node** tokens);
