@@ -89,6 +89,7 @@ int main(void)
 	isAssignment = 0;
 	while (1) {
 		rl = readline("Prompt > ");
+		//variables expansion
 		head = lexing(rl, &isAssignment);
 		free(rl);
 		//if (isAssignment == 1)
@@ -99,7 +100,6 @@ int main(void)
 			print_list(head);
 			tree = parsing(&head);
 			print_tree(tree, 0);
-			//free tree
 		}
 	}
 }

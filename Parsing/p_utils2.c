@@ -3,14 +3,17 @@
 int update_argv(char* str, t_ast** node)
 {
     int i;
+    char* newArg;
     
     i = 0;
     while ((*node)->argv[i])
         i++;
     if (i > 8)
         return _too_many_args_error();
-    (*node)->argv[i] = ft_strdup(str);
-    //mistake when ft_strdup returns null
+    newArg = ft_strdup(str);
+    if (!newArg)
+        return -1;
+    (*node)->argv[i] = newArg;
     return 1;
 }
 
