@@ -26,9 +26,16 @@ int t_word(char* input, s_node** list, int start)
 }
 
 int t_pipe(s_node **list)
+int t_pipe(s_node **list)
 {
 	Token* newToken;
+	Token* newToken;
 
+	newToken = malloc(sizeof(Token));
+	if (!newToken)
+		return - 1;
+	newToken->type = PIPE;
+	newToken->value = ft_strdup("|");
 	newToken = malloc(sizeof(Token));
 	if (!newToken)
 		return - 1;
@@ -38,6 +45,7 @@ int t_pipe(s_node **list)
 	return 1;
 }
 
+int t_redirection(char *input, s_node **list, int start) 
 int t_redirection(char *input, s_node **list, int start) 
 {
 	Token* newToken;
@@ -51,5 +59,6 @@ int t_redirection(char *input, s_node **list, int start)
 		return _invalid_redirection_error();
 	}
 	add_node(list, &newToken);
+	return ft_strlen(newToken->value);
 	return ft_strlen(newToken->value);
 }

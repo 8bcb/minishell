@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 08:33:09 by asia              #+#    #+#             */
-/*   Updated: 2025/11/13 10:20:11 by asia             ###   ########.fr       */
+/*   Updated: 2025/12/02 09:45:03 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,26 +56,13 @@ char  *join_path(const char *dir, const char *command)
     return final_path;
 }
 
-int status_from_wait(int status)
+int	status_from_wait(int status)
 {
-    if (WIFEXITED(status))
-        return WEXITSTATUS(status);
-    if (WIFSIGNALED(status))
-        return 128 + WTERMSIG(status);
-    return 1;   
-}
-
-void    print_cmd_error(const char *command, const char *message)
-{
-    if (!command)
-        command = "";
-    if (!message)
-        message = "";
-    write(2, "minishell: ", 11);
-    write(2, command, ft_strlen(command));
-    write(2, ": ", 2);
-    write(2, message, ft_strlen(message));
-    write(2, "\n", 1);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (status);
 }
 
 int contains_slash(const char *str)

@@ -88,6 +88,7 @@ s_node* lexing(char* input, int* isAssignment)
 	int success;
 
 	head = NULL;
+	head = NULL;
 	trimmed = trim(input);
 	*isAssignment = is_valid_assignment(trimmed);
 	if (*isAssignment == 1 || *isAssignment == -1 || !valid_first_sign(trimmed[0]))

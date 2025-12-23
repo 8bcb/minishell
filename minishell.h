@@ -6,7 +6,7 @@
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 10:43:05 by pkosciel          #+#    #+#             */
-/*   Updated: 2025/11/17 07:31:34 by asia             ###   ########.fr       */
+/*   Updated: 2025/12/03 09:08:35 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_ast {
 	int				append;
 	int           	heredoc;     // 1 if heredoc was present
     char         	*heredoc_tmp;
+	int             heredoc_fd;
 } t_ast;
 
 typedef struct s_env {
@@ -47,6 +48,7 @@ typedef struct s_env {
 	char			*value;
 	struct s_env	*next;
 } t_env;
+
 
 typedef enum e_token_type {
 	WORD = 1,
