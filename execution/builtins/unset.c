@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 07:05:12 by asia              #+#    #+#             */
-/*   Updated: 2025/12/02 08:52:41 by asia             ###   ########.fr       */
+/*   Updated: 2026/01/17 16:58:31 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./builtins.h"
 #include "../exec.h"
-#include "env_utils.h"
+#include "env_utils/env_utils.h"
 
 static int	is_valid_identifier(const char *s)
 {
@@ -32,6 +32,24 @@ static int	is_valid_identifier(const char *s)
 	return (1);
 }
 
+static void	free_node_middle(t_env *prev, t_env *cur)
+{
+	prev->next = cur->next;
+	free(cur->key);
+	if (cur->value)
+		free(cur->value);
+	free(cur);
+}
+
+static void	clear_head_node(t_env *cur)
+{
+	free(cur->key);
+	if (cur->value)
+		free(cur->value);
+	cur->key = NULL;
+	cur->value = NULL;
+}
+
 static void	unset_one(char *key, t_env *env)
 {
 	t_env	*cur;
@@ -47,21 +65,9 @@ static void	unset_one(char *key, t_env *env)
 			&& ft_strncmp(cur->key, key, ft_strlen(key) + 1) == 0)
 		{
 			if (prev)
-			{
-				prev->next = cur->next;
-				free(cur->key);
-				if (cur->value)
-					free(cur->value);
-				free(cur);
-			}
+				free_node_middle(prev, cur);
 			else
-			{
-				free(cur->key);
-				if (cur->value)
-					free(cur->value);
-				cur->key = NULL;
-				cur->value = NULL;
-			}
+				clear_head_node(cur);
 			return ;
 		}
 		prev = cur;
@@ -82,7 +88,7 @@ int	builtin_unset(char **argv, t_env *env)
 			unset_one(argv[i], env);
 		else
 		{
-			write(2, "minishell: unset: `", 20);
+			write(2, "minishell: unset: `", 19);
 			write(2, argv[i], ft_strlen(argv[i]));
 			write(2, "': not a valid identifier\n", 26);
 		}

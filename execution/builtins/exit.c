@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 07:07:31 by asia              #+#    #+#             */
-/*   Updated: 2025/12/03 09:12:36 by asia             ###   ########.fr       */
+/*   Updated: 2026/01/17 16:46:15 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./builtins.h"
 #include "../exec.h"
-#include "env_utils.h"
+#include "env_utils/env_utils.h"
 #include <limits.h>
 #include <errno.h>
 #include <unistd.h>
