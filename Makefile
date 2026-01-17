@@ -38,7 +38,9 @@ SRCS        := \
 	execution/builtins/pwd.c \
 	execution/builtins/unset.c \
 	execution/redirection/exec_redirection.c \
+	execution/redirection/exec_redirection_heredoc.c \
 	execution/redirection/exec_redirection_utils.c \
+	execution/redirection/exec_redirection_stdio.c \
 	env_utils/env_utils.c \
 	env_utils/env_init.c \
 	env_utils/env_modify.c \
