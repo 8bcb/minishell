@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.h                                          :+:      :+:    :+:   */
+/*   signals_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/17 14:52:14 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/17 14:52:16 by jziola           ###   ########.fr       */
+/*   Created: 2026/01/17 14:52:32 by jziola            #+#    #+#             */
+/*   Updated: 2026/01/17 16:07:30 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIGNALS_H
-# define SIGNALS_H
+#include <signal.h>
+#include <unistd.h>
 
-# include <signal.h>
+void	setup_exec_signals_parent(void)
+{
+	struct sigaction	sa;
 
-extern volatile sig_atomic_t	g_sig;
-
-void	setup_interactive_signals(void);
-void	setup_exec_signals_parent(void);
-void    setup_heredoc_signals(void);
-
-#endif
+	sa.sa_handler = SIG_IGN;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
+}

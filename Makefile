@@ -38,6 +38,8 @@ SRCS        := \
 	execution/redirection/exec_redirection_utils.c \
 	env_utils.c \
 	signals.c \
+	signals_exec.c \
+	signals_heredoc.c \
 	execution/exec_free_ast.c \
 
 OBJS        := $(SRCS:.c=.o)
