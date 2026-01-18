@@ -1,31 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   linked_list.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/18 12:42:53 by pkosciel          #+#    #+#             */
+/*   Updated: 2026/01/18 12:45:03 by pkosciel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-void add_node(s_node** list, Token **newToken) 
+void	add_node(s_node **list, Token **newToken)
 {
-	s_node *newNode;
-	s_node *tail;
+	s_node	*new_node;
+	s_node	*tail;
 
 	tail = *list;
-	newNode = malloc(sizeof(s_node));
-	if (!newNode)
-		return;
-	newNode->val = *newToken;
-	newNode->next = NULL;
+	new_node = malloc(sizeof(s_node));
+	if (!new_node)
+		return ;
+	new_node->val = *newToken;
+	new_node->next = NULL;
 	if (*list == NULL)
-		*list = newNode;
-	else 
+		*list = new_node;
+	else
 	{
 		while (tail->next != NULL)
 			tail = tail->next;
-		tail->next = newNode;
+		tail->next = new_node;
 	}
 }
 
-void free_list(s_node **list) {
-	s_node* tmp;
+void	free_list(s_node **list)
+{
+	s_node	*tmp;
 
 	tmp = NULL;
-	while (*list != NULL) {
+	while (*list != NULL)
+	{
 		tmp = *list;
 		*list = (*list)->next;
 		free(tmp->val->value);
@@ -34,11 +48,14 @@ void free_list(s_node **list) {
 	}
 }
 
-void print_list(s_node *head) {
-	s_node *curr = head;
-	while(curr != NULL)
+void	print_list(s_node *head)
+{
+	s_node	*curr;
+
+	curr = head;
+	while (curr != NULL)
 	{
-		printf("Token %d: %s\n",curr->val->type, curr->val->value);
+		printf("Token %d: %s\n", curr->val->type, curr->val->value);
 		curr = curr->next;
 	}
 }

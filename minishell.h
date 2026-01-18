@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 10:43:05 by pkosciel          #+#    #+#             */
-/*   Updated: 2025/12/03 09:08:35 by asia             ###   ########.fr       */
+/*   Updated: 2026/01/18 13:06:44 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ int _unclosed_quotes_error();
 int _invalid_redirection_error();
 void _invalid_input();
 
-int isWhiteSpace(char c);
-int isSeparator(char c);
+int is_whitespace(char c);
+int is_separator(char c);
 int valid_first_sign(char c);
 char* trim(char *input);
 char* add_quoted_part(char* input, int* i);
