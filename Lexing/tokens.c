@@ -6,7 +6,7 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 12:49:33 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 12:49:57 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/18 14:32:12 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,7 @@ int	t_word(char *input, s_node **list, int start)
 int	t_pipe(s_node **list)
 {
 	Token	*new_token;
-	Token	*new_token;
 
-	new_token = malloc(sizeof(Token));
-	if (!new_token)
-		return (-1);
-	new_token->type = PIPE;
-	new_token->value = ft_strdup("|");
 	new_token = malloc(sizeof(Token));
 	if (!new_token)
 		return (-1);

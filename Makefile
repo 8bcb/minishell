@@ -1,23 +1,4 @@
 NAME := mini
-SRC := main.c \
-Lexing/lexer.c \
-Lexing/l_utils.c \
-Lexing/l_utils2.c \
-Lexing/linked_list.c \
-Lexing/tokens.c \
-Lexing/errors.c \
-Parsing/parsing.c \
-Parsing/parsing_errors.c \
-Parsing/p_utils.c \
-Parsing/p_utils2.c \
-execution/exec_ast.c \
-execution/exec_command.c \
-execution/exec_pipeline.c \
-execution/exec_external/exec_external.c \
-execution/exec_external/exec_external_utils.c \
-execution/builtins/echo.c \
-execution/builtins/exec_builtin.c \
-execution/redirection/exec_redirection.c 
 OBJ = $(SRC:.c=.o)
 CC = cc
 CFLAGS := -Wall -Wextra -Werror
@@ -29,14 +10,16 @@ LIBFT       := $(LIBFT_DIR)/libft.a
 
 SRCS        := \
 	main.c \
-	Lexing/utils.c \
 	Lexing/lexer.c \
+	Lexing/l_utils.c \
+	Lexing/l_utils2.c \
 	Lexing/linked_list.c \
 	Lexing/tokens.c \
 	Lexing/errors.c \
 	Parsing/parsing.c \
 	Parsing/parsing_errors.c \
-	Parsing/parsing_utils.c \
+	Parsing/p_utils.c \
+	Parsing/p_utils2.c \
 	execution/exec_ast.c \
 	execution/exec_command.c \
 	execution/exec_pipeline.c \

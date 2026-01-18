@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 10:00:00 by asia              #+#    #+#             */
-/*   Updated: 2026/01/18 13:38:14 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/18 14:21:01 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	main(int argc, char **argv, char **envp)
 
 		head = NULL;
 		isAssignment = 0;
-		head = tokenizing(rl, &isAssignment);
+		head = lexing(rl, &isAssignment);
 		free(rl);
 
 		if (isAssignment == -1)
@@ -66,8 +66,6 @@ int	main(int argc, char **argv, char **envp)
 				free_ast(tree);
 			}
 		}
-
-		free(rl);
 	}
 	return (exit_status);
 }

@@ -6,13 +6,13 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 09:30:22 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 13:11:36 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/18 14:24:29 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int scan_for_assignment(char *str, int* equals_count, int* open_quote)
+int scan_for_assignment(char *str, int *equals_count, int *open_quote)
 {
 	while (*str) 
 	{
@@ -24,7 +24,12 @@ int scan_for_assignment(char *str, int* equals_count, int* open_quote)
 		}
 		else if (((*str == 34 || *str == 39) && *open_quote == 0 ) 
 			|| (*str == *open_quote && *open_quote != 0))
-			*open_quote = (*open_quote == 0 ? *str : 0);
+		{
+			if ((*open_quote) == 0)
+				*open_quote = *str;
+			else
+				*open_quote = 0;
+		}
 		else if (*open_quote == 0 && is_whitespace(*str) == 1)
 		{
 			if (*equals_count == 0)
@@ -89,8 +94,9 @@ s_node	*lexing(char *input, int *isAssignment)
 	int		success;
 
 	head = NULL;
-	head = NULL;
 	trimmed = trim(input);
+	if (!trimmed)
+		return (NULL);
 	*isAssignment = is_valid_assignment(trimmed);
 	if (*isAssignment == 1 || *isAssignment == -1
 		|| !valid_first_sign(trimmed[0]))
