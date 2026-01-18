@@ -6,7 +6,7 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 10:43:05 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 13:06:44 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/18 13:46:05 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
+#include <signal.h>
 
 typedef enum e_node_type {
 	NODE_COMMAND,
@@ -86,7 +87,6 @@ void set_redir_token_values(char* input, Token** token, int start);
 
 void add_node(s_node** list, Token **newToken);
 void free_list(s_node **list);
-void print_list(s_node *head);
 
 int t_word(char* input, s_node **list, int start);
 int t_pipe(s_node **list);

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 06:59:57 by asia              #+#    #+#             */
-/*   Updated: 2025/12/02 08:52:24 by asia             ###   ########.fr       */
+/*   Updated: 2026/01/17 16:56:21 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./builtins.h"
 #include "../exec.h"
-#include "env_utils.h"
+#include "env_utils/env_utils.h"
 
 static int	is_valid_identifier(const char *s)
 {
@@ -32,6 +32,29 @@ static int	is_valid_identifier(const char *s)
 	return (1);
 }
 
+static void	print_export_error(char *arg)
+{
+	write(2, "minishell: export: `", 20);
+	write(2, arg, ft_strlen(arg));
+	write(2, "': not a valid identifier\n", 26);
+}
+
+static void	split_export_arg(char *arg, char **key, char **value, char **eq)
+{
+	*eq = ft_strchr(arg, '=');
+	if (*eq)
+	{
+		**eq = '\0';
+		*key = arg;
+		*value = *eq + 1;
+	}
+	else
+	{
+		*key = arg;
+		*value = NULL;
+	}
+}
+
 static int	export_one(char *arg, t_env *env)
 {
 	char	*eq;
@@ -39,23 +62,10 @@ static int	export_one(char *arg, t_env *env)
 	char	*value;
 	t_env	*tmp;
 
-	eq = ft_strchr(arg, '=');
-	if (eq)
-	{
-		*eq = '\0';
-		key = arg;
-		value = eq + 1;
-	}
-	else
-	{
-		key = arg;
-		value = NULL;
-	}
+	split_export_arg(arg, &key, &value, &eq);
 	if (!is_valid_identifier(key))
 	{
-		write(2, "minishell: export: `", 21);
-		write(2, arg, ft_strlen(arg));
-		write(2, "': not a valid identifier\n", 26);
+		print_export_error(arg);
 		if (eq)
 			*eq = '=';
 		return (1);

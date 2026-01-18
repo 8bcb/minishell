@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   exec_redirection_stdio.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/26 09:49:17 by asia              #+#    #+#             */
-/*   Updated: 2026/01/17 16:57:47 by jziola           ###   ########.fr       */
+/*   Created: 2025/12/02 08:10:37 by asia              #+#    #+#             */
+/*   Updated: 2026/01/17 17:36:18 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./builtins.h"
+#include "./exec_redirection.h"
 #include "../exec.h"
+#include <unistd.h>
 
-int	builtin_pwd(char **argv, t_env *env)
+int	save_stdio(int *saved_in, int *saved_out)
 {
-	char	*cwd;
-
-	(void)argv;
-	(void)env;
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		return (1);
-	write(1, cwd, ft_strlen(cwd));
-	write(1, "\n", 1);
-	free(cwd);
+	*saved_in = dup(STDIN_FILENO);
+	if (*saved_in < 0)
+		return (-1);
+	*saved_out = dup(STDOUT_FILENO);
+	if (*saved_out < 0)
+	{
+		close(*saved_in);
+		*saved_in = -1;
+		return (-1);
+	}
 	return (0);
 }

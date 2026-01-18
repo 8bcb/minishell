@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   signals_heredoc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/26 09:49:17 by asia              #+#    #+#             */
-/*   Updated: 2026/01/17 16:57:47 by jziola           ###   ########.fr       */
+/*   Created: 2026/01/17 14:52:32 by jziola            #+#    #+#             */
+/*   Updated: 2026/01/17 14:59:17 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./builtins.h"
-#include "../exec.h"
+#include <signal.h>
+#include <unistd.h>
 
-int	builtin_pwd(char **argv, t_env *env)
+extern volatile sig_atomic_t	g_sig;
+
+static void	sigint_heredoc(int signo)
 {
-	char	*cwd;
-
-	(void)argv;
-	(void)env;
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		return (1);
-	write(1, cwd, ft_strlen(cwd));
+	(void)signo;
+	g_sig = SIGINT;
 	write(1, "\n", 1);
-	free(cwd);
-	return (0);
+}
+
+void	setup_heredoc_signals(void)
+{
+	struct sigaction	sa;
+
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sa.sa_handler = sigint_heredoc;
+	sigaction(SIGINT, &sa, NULL);
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &sa, NULL);
 }

@@ -44,7 +44,10 @@ SRCS        := \
 	execution/exec_pipeline_utils_2.c \
 	execution/exec_utils.c \
 	execution/exec_external/exec_external.c \
+	execution/exec_external/exec_external_helpers.c \
+	execution/exec_external/exec_external_path.c \
 	execution/exec_external/exec_external_utils.c \
+	execution/exec_external/exec_external_utils2.c \
 	execution/builtins/echo.c \
 	execution/builtins/exec_builtin.c \
 	execution/builtins/cd.c \
@@ -54,9 +57,16 @@ SRCS        := \
 	execution/builtins/pwd.c \
 	execution/builtins/unset.c \
 	execution/redirection/exec_redirection.c \
+	execution/redirection/exec_redirection_heredoc.c \
 	execution/redirection/exec_redirection_utils.c \
-	env_utils.c \
+	execution/redirection/exec_redirection_stdio.c \
+	env_utils/env_utils.c \
+	env_utils/env_init.c \
+	env_utils/env_modify.c \
+	env_utils/env_convert.c \
 	signals.c \
+	signals_exec.c \
+	signals_heredoc.c \
 	execution/exec_free_ast.c \
 
 OBJS        := $(SRCS:.c=.o)

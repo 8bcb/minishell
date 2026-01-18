@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 10:00:00 by asia              #+#    #+#             */
-/*   Updated: 2025/12/19 08:51:59 by asia             ###   ########.fr       */
+/*   Updated: 2026/01/18 13:38:14 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "execution/exec.h"
-#include "env_utils.h"
+#include "env_utils/env_utils.h"
 #include "signals.h"
 
 int	main(int argc, char **argv, char **envp)
@@ -59,9 +59,7 @@ int	main(int argc, char **argv, char **envp)
 
 		if (head != NULL)
 		{
-			print_list(head);
 			tree = parsing(&head);
-			print_tree(tree, 0);
 			if (tree != NULL)
 			{
 				exit_status = exec_ast(tree, env);

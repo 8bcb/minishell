@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 09:55:03 by asia              #+#    #+#             */
-/*   Updated: 2025/12/02 08:54:02 by asia             ###   ########.fr       */
+/*   Updated: 2026/01/18 13:38:51 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 
 int	builtin_env(char **argv, t_env *env)
 {
-	(void)argv;
+	if (argv && argv[1])
+	{
+		print_cmd_error("env", "too many arguments");
+		return (1);
+	}
 	while (env)
 	{
 		if (env->key && env->value)

@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   signals_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/26 09:49:17 by asia              #+#    #+#             */
-/*   Updated: 2026/01/17 16:57:47 by jziola           ###   ########.fr       */
+/*   Created: 2026/01/17 14:52:32 by jziola            #+#    #+#             */
+/*   Updated: 2026/01/17 16:07:30 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./builtins.h"
-#include "../exec.h"
+#include <signal.h>
+#include <unistd.h>
 
-int	builtin_pwd(char **argv, t_env *env)
+void	setup_exec_signals_parent(void)
 {
-	char	*cwd;
+	struct sigaction	sa;
 
-	(void)argv;
-	(void)env;
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		return (1);
-	write(1, cwd, ft_strlen(cwd));
-	write(1, "\n", 1);
-	free(cwd);
-	return (0);
+	sa.sa_handler = SIG_IGN;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
 }
