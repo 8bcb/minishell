@@ -6,7 +6,7 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 10:00:00 by asia              #+#    #+#             */
-/*   Updated: 2026/01/18 14:21:01 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/18 16:38:49 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int	main(int argc, char **argv, char **envp)
 
 		if (*rl)
 			add_history(rl);
-
 		head = NULL;
 		isAssignment = 0;
 		head = lexing(rl, &isAssignment);

@@ -6,7 +6,7 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 12:41:02 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 13:06:52 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/18 16:51:18 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	add_to_buffer(char *input, char **buffer, int *i)
 	return (1);
 }
 
-void	set_redir_token_values(char *input, Token **token, int start)
+void	set_redir_token_values(char *input, t_token **token, int start)
 {
 	char	current;
 	char	one_ahead;

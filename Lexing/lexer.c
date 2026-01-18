@@ -6,15 +6,23 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 09:30:22 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 14:24:29 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/18 16:49:58 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int scan_for_assignment(char *str, int *equals_count, int *open_quote)
+int	check_equals_count(int *equals_count)
 {
-	while (*str) 
+	if (*equals_count == 0)
+		return (0);
+	else
+		return (_invalid_assignment_error);
+}
+
+int	scan_for_assignment(char *str, int *equals_count, int *open_quote)
+{
+	while (*str)
 	{
 		if (*open_quote == 0 && *str == '=')
 		{
@@ -22,7 +30,7 @@ int scan_for_assignment(char *str, int *equals_count, int *open_quote)
 			if (*equals_count > 1)
 				return (_invalid_assignment_error());
 		}
-		else if (((*str == 34 || *str == 39) && *open_quote == 0 ) 
+		else if (((*str == 34 || *str == 39) && *open_quote == 0)
 			|| (*str == *open_quote && *open_quote != 0))
 		{
 			if ((*open_quote) == 0)
@@ -31,12 +39,7 @@ int scan_for_assignment(char *str, int *equals_count, int *open_quote)
 				*open_quote = 0;
 		}
 		else if (*open_quote == 0 && is_whitespace(*str) == 1)
-		{
-			if (*equals_count == 0)
-				return (0);
-			else
-				return (_invalid_assignment_error());
-		}
+			return (check_equals_count(equals_count));
 		str++;
 	}
 	return (1);
@@ -62,7 +65,7 @@ int	is_valid_assignment(char *str)
 	return (0);
 }
 
-int	tokenize_input(char *input, s_node **list)
+int	tokenize_input(char *input, t_node **list)
 {
 	int	i;
 	int	increment;
@@ -87,9 +90,9 @@ int	tokenize_input(char *input, s_node **list)
 	return (1);
 }
 
-s_node	*lexing(char *input, int *isAssignment)
+t_node	*lexing(char *input, int *isAssignment)
 {
-	s_node	*head;
+	t_node	*head;
 	char	*trimmed;
 	int		success;
 

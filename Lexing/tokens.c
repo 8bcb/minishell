@@ -6,20 +6,20 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 12:49:33 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 14:32:12 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/18 16:51:45 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	t_word(char *input, s_node **list, int start)
+int	t_word(char *input, t_node **list, int start)
 {
 	int		i;
 	int		success;
-	Token	*new_token;
+	t_token	*new_token;
 	char	*buffer;
 
-	new_token = malloc(sizeof(Token));
+	new_token = malloc(sizeof(t_token));
 	buffer = calloc(ft_strlen(&(input[start])) + 1, sizeof(char));
 	if (!new_token || !buffer)
 		return (-1);
@@ -37,11 +37,11 @@ int	t_word(char *input, s_node **list, int start)
 	return (i - start);
 }
 
-int	t_pipe(s_node **list)
+int	t_pipe(t_node **list)
 {
-	Token	*new_token;
+	t_token	*new_token;
 
-	new_token = malloc(sizeof(Token));
+	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (-1);
 	new_token->type = PIPE;
@@ -50,11 +50,11 @@ int	t_pipe(s_node **list)
 	return (1);
 }
 
-int	t_redirection(char *input, s_node **list, int start)
+int	t_redirection(char *input, t_node **list, int start)
 {
-	Token	*new_token;
+	t_token	*new_token;
 
-	new_token = malloc(sizeof(Token));
+	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (-1);
 	set_redir_token_values(input, &new_token, start);
