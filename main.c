@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 10:00:00 by asia              #+#    #+#             */
-/*   Updated: 2026/01/18 13:11:07 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/18 13:38:14 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,7 @@ int	main(int argc, char **argv, char **envp)
 
 		if (head != NULL)
 		{
-			print_list(head);
 			tree = parsing(&head);
-			print_tree(tree, 0);
 			if (tree != NULL)
 			{
 				exit_status = exec_ast(tree, env);

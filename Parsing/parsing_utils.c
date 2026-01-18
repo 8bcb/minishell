@@ -31,22 +31,3 @@ t_ast* create_pipe_node(t_ast* left, t_ast* right)
     node->heredoc_fd = -1;
     return node;
 }
-
-void print_tree(t_ast* tree, int depth)
-{
-    int i = 0;
-
-    if (tree == NULL)
-        return;
-    printf("Depth: %d, node type: %d\n",depth, tree->type);
-    if (tree->type == NODE_COMMAND)
-    {
-        while (tree->argv[i])
-        {
-            printf("Arg %d: %s\n", i, tree->argv[i]);
-            i++;
-        }
-    }
-    print_tree(tree->left, depth + 1);
-    print_tree(tree->right, depth + 1);
-}

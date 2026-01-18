@@ -33,12 +33,3 @@ void free_list(s_node **list) {
 		free(tmp);
 	}
 }
-
-void print_list(s_node *head) {
-	s_node *curr = head;
-	while(curr != NULL)
-	{
-		printf("Token %d: %s\n",curr->val->type, curr->val->value);
-		curr = curr->next;
-	}
-}

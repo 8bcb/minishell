@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 10:43:05 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 13:11:12 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/18 13:37:59 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ char* trim(char *input);
 
 void add_node(s_node** list, Token **newToken);
 void free_list(s_node **list);
-void print_list(s_node *head);
 
 //int t_command(char* input, s_node **list, int start, int *commandFlag);
 int t_quoted_argument(char *input, s_node** list, int start, int quoteType);
@@ -96,7 +95,6 @@ t_ast* parsing(s_node** tokens);
 
 t_ast* create_command_node();
 t_ast* create_pipe_node(t_ast* left, t_ast* right);
-void print_tree(t_ast* tree, int depth);
 
 int _too_many_args_error();
 int _invalid_syntax_error();
