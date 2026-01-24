@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 16:43:39 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/24 11:53:38 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 13:05:45 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,14 @@
 # define ENV_UTILS_H
 
 # include "../minishell.h"
+
+typedef struct s_env_expand {
+    int     i;
+    int     j;
+    char    *rl;
+    char    *res;
+    t_env   *env;
+} t_env_expand;
 
 t_env	*env_node_new(const char *key, const char *value);
 void	env_add_back(t_env **env, t_env *new_node);

@@ -20,10 +20,13 @@ static void	process_input(char *rl, t_env *env, int *exit_status)
 	t_node	*head;
 	t_ast	*tree;
 	int		is_assignment;
+	char	*str;
 
 	head = NULL;
 	is_assignment = 0;
-	head = lexing(rl, &is_assignment);
+	str = expand_variables(rl,env);
+	head = lexing(str, &is_assignment);
+	free(str);
 	if (is_assignment == -1)
 		return ;
 	if (head != NULL)
