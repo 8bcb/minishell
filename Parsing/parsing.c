@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 15:45:09 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 16:48:35 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/24 11:52:55 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,14 @@ t_ast	*pipeline_parser(t_node **tokens)
 
 t_ast	*parsing(t_node **tokens)
 {
-	t_node	**tok_list;
+	t_node	*tok_list;
 	t_ast	*res;
 
-	tok_list = tokens;
+	if (!tokens)
+		return (NULL);
+	tok_list = *tokens;
 	res = pipeline_parser(tokens);
-	free_list(tok_list);
+	free_list(&tok_list);
 	if (!res)
 		return (NULL);
 	return (res);

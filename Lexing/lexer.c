@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 09:30:22 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/24 11:13:59 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 11:49:41 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ t_node	*lexing(char *input, int *isAssignment)
 	free(trimmed);
 	if (success == -1)
 	{
-		free(head);
+		free_list(&head);
 		return (NULL);
 	}
 	return (head);
