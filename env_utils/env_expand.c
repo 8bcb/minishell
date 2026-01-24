@@ -7,14 +7,11 @@ char *get_env_key(t_env_expand *ex, int *len)
     char    *var_key;
 
     k = ex->i + 1;
-    while (ex->rl[k])
-    {
-        if (is_separator(ex->rl[k]) || is_whitespace(ex->rl[k]) 
-            || ex->rl[k] == 34 || ex->rl[k] == 39)
-            break;
-        (*len)++;
-        k++;
-    }
+	while (ex->rl[k] && (ft_isalnum(ex->rl[k]) || ex->rl[k] == '_'))
+	{
+    	(*len)++;
+    	k++;
+	}
     if (*len == 0)
         return (NULL);
     var_key = ft_substr(ex->rl, ex->i + 1, *len);
@@ -55,7 +52,7 @@ int expand(t_env_expand *ex)
         k++;
         (ex->j)++;
     }
-    free(var_value);
+    //free(var_value);
     return (0);
 }
 
