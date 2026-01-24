@@ -6,19 +6,23 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/24 14:04:52 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/24 14:05:06 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/24 14:32:17 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include "env_utils.h"
 
-void	init_var(t_env_expand *var, char *rl, t_env *env)
+void	assign_char(t_env_expand *var, int *single_quote)
 {
-	var->i = 0;
-	var->j = 0;
-	var->rl = rl;
-	var->env = env;
+	if (var->rl[var->i] == 39)
+	{
+		if (*single_quote == 0)
+			*single_quote = 1;
+		else
+			*single_quote = 0;
+	}
+	var->res[(var->j)++] = var->rl[(var->i)++];
 }
 
 char	*get_env_key(t_env_expand *ex, int *len)
@@ -65,14 +69,12 @@ int	expand(t_env_expand *ex)
 	int		k;
 	char	*var_name;
 	char	*var_value;
-	t_env	*tmp;
 
 	k = 0;
-	tmp = ex->env;
 	var_name = get_env_key(ex, &k);
 	if (!var_name)
 		return (-1);
-	var_value = search_env_list(ex->rl, var_name, k);
+	var_value = search_env_list(ex->env, var_name, k);
 	free(var_name);
 	if (!var_value)
 		return (-1);
@@ -92,25 +94,22 @@ char	*expand_variables(char *rl, t_env *env)
 	t_env_expand	exp;
 
 	single_quote = 0;
-	init_var(&exp, rl, env);
+	exp.i = 0;
+	exp.j = 0;
+	exp.rl = rl;
+	exp.env = env;
 	exp.res = ft_calloc(ft_strlen(rl) + 1000, sizeof(char));
 	if (!exp.res)
 		return (NULL);
 	while (rl[exp.i])
 	{
 		if (rl[exp.i] == '$' && single_quote == 0)
-			expand(&exp);
-		else
 		{
-			if (rl[exp.i] == 39)
-			{
-				if (single_quote == 1)
-					single_quote = 0;
-				else
-					single_quote = 1;
-			}
-			exp.res[(exp.j)++] = rl[(exp.i)++];
+			if (expand(&exp) == -1)
+				exp.res[(exp.j)++] = rl[(exp.i)++];
 		}
+		else
+			assign_char(&exp, &single_quote);
 	}
 	return (exp.res);
 }
