@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 10:00:00 by asia              #+#    #+#             */
-/*   Updated: 2026/01/24 15:44:14 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 16:34:29 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int	main(int argc, char **argv, char **envp)
 	exit_status = 0;
 	env = env_init(envp);
 	setup_interactive_signals();
+	disable_echoctl();
 	while (1)
 	{
 		rl = get_prompt(exit_status, prompt_buf);

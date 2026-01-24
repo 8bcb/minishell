@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 14:52:32 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/24 14:44:36 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 16:35:59 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
+#include <termios.h>
 
 volatile sig_atomic_t	g_sig = 0;
 
@@ -46,4 +47,14 @@ void	setup_interactive_signals(void)
 	sigaction(SIGINT, &sa, NULL);
 	sa.sa_handler = sigquit_interactive;
 	sigaction(SIGQUIT, &sa, NULL);
+}
+
+void	disable_echoctl(void)
+{
+	struct termios	t;
+
+	if (tcgetattr(STDIN_FILENO, &t) == -1)
+		return ;
+	t.c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &t);
 }
