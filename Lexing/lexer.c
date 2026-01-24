@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 09:30:22 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/24 11:49:41 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 15:53:45 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,8 @@ t_node	*lexing(char *input, int *isAssignment)
 	if (!trimmed)
 		return (NULL);
 	*isAssignment = is_valid_assignment(trimmed);
-	if (*isAssignment == 1 || *isAssignment == -1
-		|| !valid_first_sign(trimmed[0]))
+	if (*isAssignment == 1 || *isAssignment == -1)
 	{
-		if (!valid_first_sign(trimmed[0]))
-			_invalid_input();
 		free(trimmed);
 		return (NULL);
 	}

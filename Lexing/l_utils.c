@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 13:07:18 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 13:07:20 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/24 15:53:53 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,6 @@ int	is_whitespace(char c)
 int	is_separator(char c)
 {
 	if (c == '|' || c == '<' || c == '>')
-		return (1);
-	return (0);
-}
-
-int	valid_first_sign(char c)
-{
-	if (ft_isalpha(c) || c == '<' || c == '>')
 		return (1);
 	return (0);
 }

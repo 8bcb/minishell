@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 10:43:05 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/24 14:50:51 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 15:54:12 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void	_invalid_input(void);
 
 int		is_whitespace(char c);
 int		is_separator(char c);
-int		valid_first_sign(char c);
 char	*trim(char *input);
 char	*add_quoted_part(char *input, int *i);
 int		add_to_buffer(char *input, char **buffer, int *i);

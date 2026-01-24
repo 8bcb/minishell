@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_expand.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/24 14:04:52 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/24 14:32:17 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/24 15:53:13 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ char	*get_env_key(t_env_expand *ex, int *len)
 	char	*var_key;
 
 	k = ex->i + 1;
-	while (ex->rl[k] && (ft_isalnum(ex->rl[k]) || ex->rl[k] == '_'))
+	while (ex->rl[k] && (ft_isalnum(ex->rl[k]) || ex->rl[k] == '_'
+			|| ex->rl[k] == '?'))
 	{
 		(*len)++;
 		k++;
