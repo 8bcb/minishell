@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 09:30:22 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 16:49:58 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/24 11:13:59 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	check_equals_count(int *equals_count)
 	if (*equals_count == 0)
 		return (0);
 	else
-		return (_invalid_assignment_error);
+		return (_invalid_assignment_error());
 }
 
 int	scan_for_assignment(char *str, int *equals_count, int *open_quote)
