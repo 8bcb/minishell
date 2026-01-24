@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 09:16:06 by asia              #+#    #+#             */
-/*   Updated: 2026/01/18 13:13:06 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 17:22:33 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@
 typedef struct s_env	t_env;
 
 int		exec_external(t_ast *cmd, t_env *env);
-char	*resolve_in_path(char *command);
+char	*resolve_in_path(char *command, t_env *env);
 int		spawn_execve_with_redirs(const char *path, t_ast *cmd, char **envp);
 void	exec_external_child(t_ast *cmd, t_env *env);
 int		exec_with_slash(t_ast *cmd, char **envp);
-int		exec_from_path(t_ast *cmd, char **envp);
+int		exec_from_path(t_ast *cmd, char **envp, t_env *env);
 
 void	free_split(char **split_array);
 char	*join_path(const char *dir, const char *command);

@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 09:03:55 by asia              #+#    #+#             */
-/*   Updated: 2026/01/17 17:09:24 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 17:21:47 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ int	exec_with_slash(t_ast *cmd, char **envp)
 	return (status);
 }
 
-int	exec_from_path(t_ast *cmd, char **envp)
+int	exec_from_path(t_ast *cmd, char **envp, t_env *env)
 {
 	char	*path;
 	int		status;
 
-	path = resolve_in_path(cmd->argv[0]);
+	path = resolve_in_path(cmd->argv[0], env);
 	if (!path)
 	{
 		print_cmd_error(cmd->argv[0], "command not found");

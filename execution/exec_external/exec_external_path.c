@@ -6,13 +6,14 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 09:03:55 by asia              #+#    #+#             */
-/*   Updated: 2026/01/17 17:09:33 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 17:23:56 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../exec.h"
 #include "./exec_external.h"
 #include <unistd.h>
+#include "../env_utils/env_utils.h"
 
 static char	*check_candidate(char *candidate, char **potential_paths)
 {
@@ -30,14 +31,14 @@ static char	*check_candidate(char *candidate, char **potential_paths)
 	return (NULL);
 }
 
-char	*resolve_in_path(char *command)
+char	*resolve_in_path(char *command, t_env *env)
 {
-	const char	*path;
+	char	*path;
 	char		**potential_paths;
 	int			i;
 	char		*candidate;
 
-	path = getenv("PATH");
+	path = search_env_list(env, "PATH", 4);
 	if (!path || !*path)
 		return (NULL);
 	potential_paths = ft_split(path, ':');
@@ -53,5 +54,6 @@ char	*resolve_in_path(char *command)
 		i++;
 	}
 	free_split(potential_paths);
+	free(path);
 	return (NULL);
 }

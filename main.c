@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 10:00:00 by asia              #+#    #+#             */
-/*   Updated: 2026/01/24 16:34:29 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 16:44:45 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void	process_input(char *rl, t_env *env, int *exit_status)
 	t_ast	*tree;
 	int		is_assignment;
 	char	*str;
+	char	*exit_status_str;
 
 	head = NULL;
 	is_assignment = 0;
@@ -35,7 +36,9 @@ static void	process_input(char *rl, t_env *env, int *exit_status)
 		if (tree != NULL)
 		{
 			*exit_status = exec_ast(tree, env);
-			env_set(&env, "?", ft_itoa(*exit_status));
+			exit_status_str = ft_itoa(*exit_status);
+			env_set(&env, "?", exit_status_str);
+			free(exit_status_str);
 			free_ast(tree);
 		}
 	}

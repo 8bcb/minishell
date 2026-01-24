@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 16:43:39 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/24 14:10:41 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/24 17:19:36 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ char	**env_to_envp(t_env *env);
 void	free_envp_array(char **envp);
 
 void	free_env_list(t_env *env);
+char	*search_env_list(t_env *env, char *var_name, int len);
 
 #endif

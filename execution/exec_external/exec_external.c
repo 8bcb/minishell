@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 09:03:55 by asia              #+#    #+#             */
-/*   Updated: 2026/01/17 17:08:17 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 17:23:37 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	exec_external_child(t_ast *cmd, t_env *env)
 	envp = env_to_envp(env);
 	if (contains_slash(cmd->argv[0]))
 		exec_with_path(cmd->argv[0], cmd, envp);
-	path = resolve_in_path(cmd->argv[0]);
+	path = resolve_in_path(cmd->argv[0], env);
 	if (!path)
 	{
 		print_cmd_error(cmd->argv[0], "command not found");
@@ -90,7 +90,7 @@ int	exec_external(t_ast *cmd, t_env *env)
 	if (contains_slash(cmd->argv[0]))
 		status = exec_with_slash(cmd, envp);
 	else
-		status = exec_from_path(cmd, envp);
+		status = exec_from_path(cmd, envp, env);
 	free_envp_array(envp);
 	return (status);
 }
