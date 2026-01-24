@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 16:44:34 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/17 16:46:15 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 11:45:25 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,18 @@ char	*env_get(t_env *env, const char *key)
 		env = env->next;
 	}
 	return (NULL);
+}
+
+void    free_env_list(t_env *env)
+{
+    t_env *next;
+
+    while (env)
+    {
+        next = env->next;
+        free(env->key);
+        free(env->value);
+        free(env);
+        env = next;
+    }
 }
