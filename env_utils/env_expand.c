@@ -1,88 +1,116 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_expand.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/24 14:04:52 by pkosciel          #+#    #+#             */
+/*   Updated: 2026/01/24 14:05:06 by pkosciel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 #include "env_utils.h"
 
-char *get_env_key(t_env_expand *ex, int *len)
+void	init_var(t_env_expand *var, char *rl, t_env *env)
 {
-    int     k;
-    char    *var_key;
+	var->i = 0;
+	var->j = 0;
+	var->rl = rl;
+	var->env = env;
+}
 
-    k = ex->i + 1;
+char	*get_env_key(t_env_expand *ex, int *len)
+{
+	int		k;
+	char	*var_key;
+
+	k = ex->i + 1;
 	while (ex->rl[k] && (ft_isalnum(ex->rl[k]) || ex->rl[k] == '_'))
 	{
-    	(*len)++;
-    	k++;
+		(*len)++;
+		k++;
 	}
-    if (*len == 0)
-        return (NULL);
-    var_key = ft_substr(ex->rl, ex->i + 1, *len);
-    if (!var_key)
-        return (NULL);
-    ex->i += *len + 1;
-    return var_key;
+	if (*len == 0)
+		return (NULL);
+	var_key = ft_substr(ex->rl, ex->i + 1, *len);
+	if (!var_key)
+		return (NULL);
+	ex->i += *len + 1;
+	return (var_key);
 }
 
-int expand(t_env_expand *ex)
+char	*search_env_list(t_env *env, char *var_name, int len)
 {
-    int     k;
-    char    *var_name;
-    char    *var_value;
-    t_env   *tmp;
+	t_env	*tmp;
+	char	*var_value;
 
-    k = 0;
-    var_value = NULL;
-    tmp = ex->env;
-    var_name = get_env_key(ex, &k);
-    if (!var_name)
-        return (1);
-    while (tmp)
-    {
-        if (ft_strncmp(var_name, tmp->key, k) == 0 && tmp->key[k] == '\0')
-        {
-            var_value = tmp->value;
-            break;
-        }
-        tmp = tmp->next;
-    }
-    free(var_name);
-    if (!var_value)
-        return (1);
-    k = 0;
-    while (var_value[k]) {
-        (ex->res)[ex->j] = var_value[k];
-        k++;
-        (ex->j)++;
-    }
-    //free(var_value);
-    return (0);
+	tmp = env;
+	var_value = NULL;
+	while (tmp)
+	{
+		if (ft_strncmp(var_name, tmp->key, len) == 0 && tmp->key[len] == '\0')
+		{
+			var_value = tmp->value;
+			break ;
+		}
+		tmp = tmp->next;
+	}
+	return (var_value);
 }
 
-char    *expand_variables(char *rl, t_env *env)
+int	expand(t_env_expand *ex)
 {
-    int             singleQuote;
-    t_env_expand    exp;
+	int		k;
+	char	*var_name;
+	char	*var_value;
+	t_env	*tmp;
 
-    singleQuote = 0;
-    exp.i = 0;
-    exp.j = 0;
-    exp.rl = rl;
-    exp.env = env;
-    exp.res = ft_calloc(ft_strlen(rl) + 1000, sizeof(char));
-    if (!exp.res)
-        return (NULL);
-    while (rl[exp.i])
-    {
-        if (rl[exp.i] == '$' && singleQuote == 0)
-            expand(&exp);
-        else
-        {
-            if (rl[exp.i] == 39) {
-                if (singleQuote == 1)
-                    singleQuote = 0;
-                else
-                    singleQuote = 1;
-            }
-            exp.res[(exp.j)++] = rl[(exp.i)++];
-        }
-    }
-    return exp.res;
+	k = 0;
+	tmp = ex->env;
+	var_name = get_env_key(ex, &k);
+	if (!var_name)
+		return (-1);
+	var_value = search_env_list(ex->rl, var_name, k);
+	free(var_name);
+	if (!var_value)
+		return (-1);
+	k = 0;
+	while (var_value[k])
+	{
+		(ex->res)[ex->j] = var_value[k];
+		k++;
+		(ex->j)++;
+	}
+	return (0);
+}
+
+char	*expand_variables(char *rl, t_env *env)
+{
+	int				single_quote;
+	t_env_expand	exp;
+
+	single_quote = 0;
+	init_var(&exp, rl, env);
+	exp.res = ft_calloc(ft_strlen(rl) + 1000, sizeof(char));
+	if (!exp.res)
+		return (NULL);
+	while (rl[exp.i])
+	{
+		if (rl[exp.i] == '$' && single_quote == 0)
+			expand(&exp);
+		else
+		{
+			if (rl[exp.i] == 39)
+			{
+				if (single_quote == 1)
+					single_quote = 0;
+				else
+					single_quote = 1;
+			}
+			exp.res[(exp.j)++] = rl[(exp.i)++];
+		}
+	}
+	return (exp.res);
 }
