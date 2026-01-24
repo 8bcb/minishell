@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 09:03:55 by asia              #+#    #+#             */
-/*   Updated: 2026/01/24 17:23:56 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 17:42:17 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,5 @@ char	*resolve_in_path(char *command, t_env *env)
 		i++;
 	}
 	free_split(potential_paths);
-	free(path);
 	return (NULL);
 }
