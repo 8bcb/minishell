@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 09:40:10 by asia              #+#    #+#             */
-/*   Updated: 2025/12/03 08:17:23 by asia             ###   ########.fr       */
+/*   Updated: 2026/01/24 13:45:05 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,44 +15,44 @@
 #include "./redirection/exec_redirection.h"
 #include "./exec_external/exec_external.h"
 
-int exec_command(t_ast *cmd, t_env *env)
+int	exec_command(t_ast *cmd, t_env *env)
 {
-    const t_builtin *builtin;
-    int             saved_in;
-    int             saved_out;
-    int             status;
+	const t_builtin	*builtin;
+	int				saved_in;
+	int				saved_out;
+	int				status;
 
-    if (!cmd || !cmd->argv || !cmd->argv[0])
-        return 0;
-    builtin = builtin_lookup(cmd->argv[0]);
-    if (builtin != NULL)
-    {
-        if (save_stdio(&saved_in, &saved_out) != 0)
-            return 1;
-        if (apply_redirection(cmd) != 0)
-        {
-            restore_stdio(saved_in, saved_out);
-            return (1);
-        }
-        status = exec_builtin(cmd->argv, env);
-        restore_stdio(saved_in, saved_out);
-        return status;
-    }
-    return exec_external(cmd, env);
+	if (!cmd || !cmd->argv || !cmd->argv[0])
+		return (0);
+	builtin = builtin_lookup(cmd->argv[0]);
+	if (builtin != NULL)
+	{
+		if (save_stdio(&saved_in, &saved_out) != 0)
+			return (1);
+		if (apply_redirection(cmd) != 0)
+		{
+			restore_stdio(saved_in, saved_out);
+			return (1);
+		}
+		status = exec_builtin(cmd->argv, env);
+		restore_stdio(saved_in, saved_out);
+		return (status);
+	}
+	return (exec_external(cmd, env));
 }
 
-void    run_child_command(t_ast *cmd, t_env *env)
+void	run_child_command(t_ast *cmd, t_env *env)
 {
-    const t_builtin *builtin;
-    int             status;
+	const t_builtin	*builtin;
+	int				status;
 
-    if (apply_redirection(cmd) != 0)
-        _exit(1);
-    builtin = builtin_lookup(cmd->argv[0]);
-    if (builtin != NULL)
-    {
-        status = exec_builtin(cmd->argv, env);
-        _exit(status);
-    }
-    exec_external_child(cmd, env);
+	if (apply_redirection(cmd) != 0)
+		_exit(1);
+	builtin = builtin_lookup(cmd->argv[0]);
+	if (builtin != NULL)
+	{
+		status = exec_builtin(cmd->argv, env);
+		_exit(status);
+	}
+	exec_external_child(cmd, env);
 }
