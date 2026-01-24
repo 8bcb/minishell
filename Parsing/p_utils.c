@@ -6,7 +6,7 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 15:35:19 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 16:58:58 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/24 13:43:19 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,37 +77,37 @@ void	free_tree(t_ast **tree)
 	*tree = NULL;
 }
 
-void	print_tree(t_ast	*tree, int depth)
-{
-	int	i = 0;
-	int	j = 0;
-	int	k = 0;
+// void	print_tree(t_ast	*tree, int depth)
+// {
+// 	int	i = 0;
+// 	int	j = 0;
+// 	int	k = 0;
 
-	if (tree == NULL)
-		return ;
-	printf("Depth: %d, node type: %d\n", depth, tree->type);
-	if (tree->type == NODE_COMMAND)
-	{
-		while (tree->argv[i])
-		{
-			printf("Arg %d: %s\n", i, tree->argv[i]);
-			i++;
-		}
-		if (tree->heredoc)
-			printf("Heredoc flag: %d\n", tree->heredoc);
-		if (tree->heredoc_tmp)
-			printf("Heredoc delimiter: %s\n", tree->heredoc_tmp);
-		printf("Append flag: %d\n", tree->append);
-		while (tree->infile && tree->infile[j])
-		{
-			printf("Infile %d: %s\n", j, tree->infile[j]);
-			j++;
-		}
-		while (tree->outfile && tree->outfile[k])
-		{
-			printf("Outfile %d: %s\n", k, tree->outfile[k]);
-			k++;
-		}
-	}
-	print_tree(tree->left, depth + 1);
-}
+// 	if (tree == NULL)
+// 		return ;
+// 	printf("Depth: %d, node type: %d\n", depth, tree->type);
+// 	if (tree->type == NODE_COMMAND)
+// 	{
+// 		while (tree->argv[i])
+// 		{
+// 			printf("Arg %d: %s\n", i, tree->argv[i]);
+// 			i++;
+// 		}
+// 		if (tree->heredoc)
+// 			printf("Heredoc flag: %d\n", tree->heredoc);
+// 		if (tree->heredoc_tmp)
+// 			printf("Heredoc delimiter: %s\n", tree->heredoc_tmp);
+// 		printf("Append flag: %d\n", tree->append);
+// 		while (tree->infile && tree->infile[j])
+// 		{
+// 			printf("Infile %d: %s\n", j, tree->infile[j]);
+// 			j++;
+// 		}
+// 		while (tree->outfile && tree->outfile[k])
+// 		{
+// 			printf("Outfile %d: %s\n", k, tree->outfile[k]);
+// 			k++;
+// 		}
+// 	}
+// 	print_tree(tree->left, depth + 1);
+// }

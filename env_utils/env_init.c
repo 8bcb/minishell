@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 16:44:34 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/24 13:29:39 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 14:09:20 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ static void	process_env_entry(char *entry, t_env **env)
 
 t_env	*env_init(char **envp)
 {
-	t_env	*env;
 	int		i;
+	t_env	*env;
 
 	env = NULL;
 	if (!envp)
@@ -74,16 +74,16 @@ char	*env_get(t_env *env, const char *key)
 	return (NULL);
 }
 
-void    free_env_list(t_env *env)
+void	free_env_list(t_env *env)
 {
-    t_env *next;
+	t_env	*next;
 
-    while (env)
-    {
-        next = env->next;
-        free(env->key);
-        free(env->value);
-        free(env);
-        env = next;
-    }
+	while (env)
+	{
+		next = env->next;
+		free(env->key);
+		free(env->value);
+		free(env);
+		env = next;
+	}
 }

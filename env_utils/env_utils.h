@@ -6,7 +6,7 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 16:43:39 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/24 13:05:45 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/24 14:10:41 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,14 @@
 
 # include "../minishell.h"
 
-typedef struct s_env_expand {
-    int     i;
-    int     j;
-    char    *rl;
-    char    *res;
-    t_env   *env;
-} t_env_expand;
+typedef struct s_env_expand
+{
+	int		i;
+	int		j;
+	char	*rl;
+	char	*res;
+	t_env	*env;
+}	t_env_expand;
 
 t_env	*env_node_new(const char *key, const char *value);
 void	env_add_back(t_env **env, t_env *new_node);
@@ -48,6 +49,6 @@ int		env_unset(t_env **env, const char *key);
 char	**env_to_envp(t_env *env);
 void	free_envp_array(char **envp);
 
-void    free_env_list(t_env *env);
+void	free_env_list(t_env *env);
 
 #endif
