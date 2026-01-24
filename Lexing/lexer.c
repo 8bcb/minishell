@@ -17,7 +17,7 @@ int	check_equals_count(int *equals_count)
 	if (*equals_count == 0)
 		return (0);
 	else
-		return (_invalid_assignment_error);
+		return (_invalid_assignment_error());
 }
 
 int	scan_for_assignment(char *str, int *equals_count, int *open_quote)

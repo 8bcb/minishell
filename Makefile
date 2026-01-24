@@ -46,6 +46,7 @@ SRCS        := \
 	env_utils/env_utils.c \
 	env_utils/env_init.c \
 	env_utils/env_modify.c \
+	env_utils/env_expand.c \
 	env_utils/env_convert.c \
 	signals.c \
 	signals_exec.c \

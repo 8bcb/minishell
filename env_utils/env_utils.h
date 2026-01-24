@@ -27,6 +27,14 @@
 
 # include "../minishell.h"
 
+typedef struct s_env_expand {
+    int     i;
+    int     j;
+    char    *rl;
+    char    *res;
+    t_env   *env;
+} t_env_expand;
+
 /* env_utils.c */
 t_env	*env_node_new(const char *key, const char *value);
 void	env_add_back(t_env **env, t_env *new_node);

@@ -77,6 +77,8 @@ typedef struct s_node
 	struct s_node	*next;
 }	t_node;
 
+char    *expand_variables(char *rl, t_env *env);
+
 int		_invalid_assignment_error(void);
 int		_unclosed_quotes_error(void);
 int		_invalid_redirection_error(void);
