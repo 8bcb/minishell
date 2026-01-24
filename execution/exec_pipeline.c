@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/24 13:50:19 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/24 13:50:20 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 14:52:32 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,33 +16,7 @@
 #include <sys/wait.h>
 #include "exec_external/exec_external.h"
 
-struct	s_pipeline
-{
-	int		n_stages;
-	int		n_pipes;
-	t_ast	**stages;
-	int		(*pipes)[2];
-	pid_t	*pids;
-};
-
-static int	get_last_status(pid_t *pids, int n_stages)
-{
-	int	i;
-	int	status;
-	int	last_status;
-
-	last_status = 0;
-	i = 0;
-	while (i < n_stages)
-	{
-		if (waitpid(pids[i], &status, 0) > 0)
-			last_status = status_from_wait(status);
-		i++;
-	}
-	return (last_status);
-}
-
-static void	free_pipeline(struct s_pipeline *pl)
+static void	free_pipeline(t_pipeline *pl)
 {
 	if (pl->stages)
 		free(pl->stages);
@@ -52,7 +26,7 @@ static void	free_pipeline(struct s_pipeline *pl)
 		free(pl->pipes);
 }
 
-static int	init_pipeline(t_ast *pipe_node, struct s_pipeline *pl)
+static int	init_pipeline(t_ast *pipe_node, t_pipeline *pl)
 {
 	pl->n_stages = count_commands(pipe_node);
 	if (pl->n_stages <= 0)
@@ -65,7 +39,7 @@ static int	init_pipeline(t_ast *pipe_node, struct s_pipeline *pl)
 		return (1);
 	if (pl->n_pipes > 0)
 	{
-		pl->pipes = malloc(sizeof (int[2]) * pl->n_pipes);
+		pl->pipes = malloc(sizeof (int [2]) * pl->n_pipes);
 		if (!pl->pipes)
 			return (1);
 		if (create_pipes(pl->pipes, pl->n_pipes) != 0)
@@ -75,7 +49,7 @@ static int	init_pipeline(t_ast *pipe_node, struct s_pipeline *pl)
 	return (0);
 }
 
-static int	fork_pipeline_child(struct s_pipeline *pl, int i, t_env *env)
+static int	fork_pipeline_child(t_pipeline *pl, int i, t_env *env)
 {
 	pid_t	pid;
 
@@ -98,7 +72,7 @@ static int	fork_pipeline_child(struct s_pipeline *pl, int i, t_env *env)
 	return (0);
 }
 
-static int	spawn_all_children(struct s_pipeline *pl, t_env *env)
+static int	spawn_all_children(t_pipeline *pl, t_env *env)
 {
 	int	i;
 
@@ -114,7 +88,7 @@ static int	spawn_all_children(struct s_pipeline *pl, t_env *env)
 
 int	exec_pipeline(t_ast *pipe_node, t_env *env)
 {
-	struct s_pipeline	pl;
+	t_pipeline			pl;
 	int					status;
 
 	if (!pipe_node)

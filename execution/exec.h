@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/24 13:47:35 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/24 13:47:36 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 14:42:00 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,15 @@
 
 # include "../minishell.h"
 # include "./builtins/builtins.h"
+
+typedef struct s_pipeline
+{
+	int		n_stages;
+	int		n_pipes;
+	t_ast	**stages;
+	int		(*pipes)[2];
+	pid_t	*pids;
+}	t_pipeline;
 
 int		exec_ast(t_ast *node, t_env *env);
 
@@ -39,5 +48,6 @@ void	dup_pipeline_ends(
 void	print_cmd_error(const char *command, const char *message);
 int		preprocess_heredocs(t_ast *node);
 void	free_ast(t_ast *node);
+int		get_last_status(pid_t *pids, int n_stages);
 
 #endif

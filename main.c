@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 10:00:00 by asia              #+#    #+#             */
-/*   Updated: 2026/01/24 13:23:57 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 14:49:29 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	process_input(char *rl, t_env *env, int *exit_status)
 
 	head = NULL;
 	is_assignment = 0;
-	str = expand_variables(rl,env);
+	str = expand_variables(rl, env);
 	head = lexing(str, &is_assignment);
 	free(str);
 	if (is_assignment == -1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
+/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 10:43:05 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 16:55:25 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/24 14:50:51 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef struct s_node
 	struct s_node	*next;
 }	t_node;
 
-char    *expand_variables(char *rl, t_env *env);
+char	*expand_variables(char *rl, t_env *env);
 
 int		_invalid_assignment_error(void);
 int		_unclosed_quotes_error(void);

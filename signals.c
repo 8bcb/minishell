@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 14:52:32 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/24 12:13:56 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/24 14:44:36 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ static void	sigint_interactive(int signo)
 
 static void	sigquit_interactive(int signo)
 {
-    (void)signo;
-    g_sig = SIGQUIT;
-    rl_on_new_line();
-    rl_redisplay();
+	(void)signo;
+	g_sig = SIGQUIT;
+	rl_on_new_line();
+	rl_redisplay();
 }
 
 void	setup_interactive_signals(void)
