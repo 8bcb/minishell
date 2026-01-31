@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 09:03:55 by asia              #+#    #+#             */
-/*   Updated: 2026/01/24 17:42:17 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/31 10:12:27 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ static char	*check_candidate(char *candidate, char **potential_paths)
 char	*resolve_in_path(char *command, t_env *env)
 {
 	char	*path;
-	char		**potential_paths;
-	int			i;
-	char		*candidate;
+	char	**potential_paths;
+	int		i;
+	char	*candidate;
 
 	path = search_env_list(env, "PATH", 4);
 	if (!path || !*path)
