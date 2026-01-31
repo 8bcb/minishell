@@ -6,12 +6,13 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:15:57 by asia              #+#    #+#             */
-/*   Updated: 2026/01/17 17:28:48 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/31 12:23:50 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./exec_redirection.h"
 #include "../exec.h"
+#include "../signals.h"
 
 extern volatile sig_atomic_t	g_sig;
 
@@ -28,6 +29,7 @@ static int	preprocess_heredoc_for_cmd(t_ast *cmd)
 			return (130);
 		return (1);
 	}
+	setup_interactive_signals();
 	cmd->heredoc_fd = fd;
 	return (0);
 }

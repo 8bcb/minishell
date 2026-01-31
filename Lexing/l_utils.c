@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 13:07:18 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/24 15:53:53 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/31 10:41:05 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,17 @@ char	*trim(char *input)
 {
 	int		len;
 	int		start;
-	int		j;
-	int		iter;
-	char	*res;
+	int		end;
 
-	start = 0;
-	len = ft_strlen(input);
-	while (input[start] && is_whitespace(input[start]) == 1)
-		start++;
-	j = 0;
-	iter = len - 1;
-	while (input[iter] && is_whitespace(input[iter]) == 1)
-	{
-		j++;
-		iter--;
-	}
-	res = ft_substr(input, start, len - start - j);
-	if (!res)
+	if (!input)
 		return (NULL);
-	return (res);
+	len = ft_strlen(input);
+	start = 0;
+	while (start < len && is_whitespace(input[start]))
+		start++;
+	end = len;
+	while (end > start && is_whitespace(input[end - 1]))
+		end--;
+	return (ft_substr(input, start, end - start));
 }
+

@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 08:10:37 by asia              #+#    #+#             */
-/*   Updated: 2026/01/17 17:35:56 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/31 12:22:11 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,15 @@ int	open_heredoc_fd(const char *delimiter)
 
 	if (!delimiter || pipe(pipefd) < 0)
 		return (-1);
+	g_sig = 0;
 	while (1)
 	{
-		if (g_sig == SIGINT)
-			break ;
 		line = readline("> ");
-		if (!line)
+		if (g_sig == SIGINT || !line)
+		{
+			free(line);
 			break ;
+		}
 		if (process_heredoc_line(line, delimiter, pipefd[1]))
 			break ;
 	}
@@ -81,9 +83,14 @@ int	open_outfile(char *outfile, int append)
 
 char	*get_last_file(char **file)
 {
+	int	i;
+
 	if (!file)
 		return (NULL);
-	if (file[0])
-		return (file[0]);
-	return (NULL);
+	i = 0;
+	while (file[i])
+		i++;
+	if (i == 0)
+		return (NULL);
+	return (file[i - 1]);
 }

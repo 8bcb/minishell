@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 09:03:55 by asia              #+#    #+#             */
-/*   Updated: 2026/01/24 17:23:37 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/31 12:46:03 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ int	exec_external(t_ast *cmd, t_env *env)
 	if (!cmd || !cmd->argv || !cmd->argv[0])
 		return (0);
 	envp = env_to_envp(env);
+	if (!envp)
+		return (1);
 	if (contains_slash(cmd->argv[0]))
 		status = exec_with_slash(cmd, envp);
 	else
