@@ -3,19 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   env_expand.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/24 14:04:52 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/31 11:19:58 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/31 14:55:19 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include "env_utils.h"
 
-void	assign_char(t_env_expand *var, int *single_quote)
+void	assign_char(t_env_expand *var, int *single_quote, int *double_quote)
 {
-	if (var->rl[var->i] == 39)
+	if (var->rl[var->i] == 34) 
+	{
+		if (!(*double_quote))
+			*double_quote = 1;
+		else
+			*double_quote = 0;
+	}
+	if (var->rl[var->i] == 39 && !*double_quote)
 	{
 		if (*single_quote == 0)
 			*single_quote = 1;
@@ -120,9 +127,11 @@ int	expand(t_env_expand *ex)
 char	*expand_variables(char *rl, t_env *env)
 {
 	int				single_quote;
+	int				double_quote;
 	t_env_expand	exp;
 
 	single_quote = 0;
+	double_quote = 0;
 	exp.i = 0;
 	exp.j = 0;
 	exp.rl = rl;
@@ -140,7 +149,7 @@ char	*expand_variables(char *rl, t_env *env)
 				exp.res[(exp.j)++] = rl[(exp.i)++];
 		}
 		else
-			assign_char(&exp, &single_quote);
+			assign_char(&exp, &single_quote, &double_quote);
 	}
 	return (exp.res);
 }

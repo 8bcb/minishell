@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 15:45:09 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/31 13:00:10 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/31 15:02:23 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_ast	*command_parser(t_node **tokens)
 	new_node = create_command_node();
 	if (new_node == NULL)
 		return (NULL);
-	while ((*tokens) != NULL && (*tokens)->val->type != PIPE)
+	while ((*tokens) && (*tokens)->val->type != PIPE)
 	{
 		tok_type = (*tokens)->val->type;
 		success = assign_if_valid_values(tokens, &new_node, tok_type);
@@ -84,21 +84,23 @@ t_ast	*pipeline_parser(t_node **tokens)
 	t_ast	*left;
 	t_ast	*right;
 
+	if (*tokens && (*tokens)->val->type == PIPE)
+	{
+		_invalid_syntax_error();
+		return (NULL);
+	}
 	left = command_parser(tokens);
 	if (!left)
 		return (NULL);
 	right = NULL;
-	while ((*tokens) != NULL && (*tokens)->next != NULL
-		&& (*tokens)->val->type == PIPE)
+	while ((*tokens) && (*tokens)->val->type == PIPE)
 	{
+		if (!(*tokens)-> next || (*tokens)->next->val->type == PIPE)
+			return (parsing_error(&left));
 		(*tokens) = (*tokens)->next;
 		right = command_parser(tokens);
-		if (right == NULL)
-		{
-			_invalid_syntax_error();
-			free_tree(&left);
-			return (NULL);
-		}
+		if (!right)
+			return (parsing_error(&left));
 		left = create_pipe_node(left, right);
 	}
 	return (left);

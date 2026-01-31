@@ -6,7 +6,7 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 15:54:22 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/18 15:54:23 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/31 15:03:05 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,11 @@ int	_redirection_error(void)
 {
 	printf("Redirection error");
 	return (-1);
+}
+
+t_ast	*parsing_error(t_ast **tree)
+{
+	_invalid_syntax_error();
+	free_tree(tree);
+	return (NULL);
 }
