@@ -3,19 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   env_expand_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 00:00:00 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/31 14:50:08 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/31 15:08:19 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include "env_utils.h"
 
-void	assign_char(t_env_expand *var, int *single_quote)
+void	assign_char(t_env_expand *var, int *single_quote, int *double_quote)
 {
-	if (var->rl[var->i] == 39)
+	if (var->rl[var->i] == 34) 
+	{
+		if (!(*double_quote))
+			*double_quote = 1;
+		else
+			*double_quote = 0;
+	}
+	if (var->rl[var->i] == 39 && !*double_quote)
 	{
 		if (*single_quote == 0)
 			*single_quote = 1;

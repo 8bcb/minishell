@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 16:43:39 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/31 14:46:17 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/31 15:09:41 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	free_envp_array(char **envp);
 void	free_env_list(t_env *env);
 char	*search_env_list(t_env *env, char *var_name, int len);
 
-void	assign_char(t_env_expand *var, int *single_quote);
+void	assign_char(t_env_expand *var, int *single_quote, int *double_quote);
 char	*get_env_key(t_env_expand *ex);
 int		expand_last_status(t_env_expand *ex);
 int		expand(t_env_expand *ex);
