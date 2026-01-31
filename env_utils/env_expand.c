@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/24 14:04:52 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/24 15:53:13 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/31 10:23:13 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ char	*expand_variables(char *rl, t_env *env)
 	exp.j = 0;
 	exp.rl = rl;
 	exp.env = env;
+	if (ft_strlen(rl) == 0)
+		return (NULL);
 	exp.res = ft_calloc(ft_strlen(rl) + 1000, sizeof(char));
 	if (!exp.res)
 		return (NULL);
