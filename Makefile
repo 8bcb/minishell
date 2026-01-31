@@ -1,4 +1,4 @@
-NAME := mini
+NAME := minishell
 OBJ = $(SRC:.c=.o)
 CC = cc
 CFLAGS := -Wall -Wextra -Werror

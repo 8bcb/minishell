@@ -6,7 +6,7 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 10:43:05 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/31 15:03:16 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/31 15:33:57 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	free_tree(t_ast **tree);
 int		update_argv(char *str, t_ast **node);
 int		update_redir_list(char ***list, char **str);
 int		assign_redir_values(t_ast **node, char **file, t_token_type type);
-t_ast	*parsing_error(t_ast** tree);
+t_ast	*parsing_error(t_ast **tree);
 void	print_tree(t_ast *tree, int depth);
 
 t_ast	*parsing(t_node **tokens);

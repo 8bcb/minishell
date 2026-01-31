@@ -6,7 +6,7 @@
 /*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 00:00:00 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/31 15:08:19 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/01/31 15:33:39 by pkosciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	assign_char(t_env_expand *var, int *single_quote, int *double_quote)
 {
-	if (var->rl[var->i] == 34) 
+	if (var->rl[var->i] == 34)
 	{
 		if (!(*double_quote))
 			*double_quote = 1;
