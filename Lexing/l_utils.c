@@ -6,7 +6,7 @@
 /*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 13:07:18 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/31 10:41:05 by jziola           ###   ########.fr       */
+/*   Updated: 2026/01/31 14:52:19 by jziola           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,3 @@ char	*trim(char *input)
 		end--;
 	return (ft_substr(input, start, end - start));
 }
-
