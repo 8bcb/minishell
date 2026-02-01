@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
+/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 08:15:57 by asia              #+#    #+#             */
-/*   Updated: 2026/01/18 13:13:14 by jziola           ###   ########.fr       */
+/*   Created: 2026/02/01 13:40:58 by asia              #+#    #+#             */
+/*   Updated: 2026/02/01 13:40:59 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,58 +51,69 @@ static int	apply_heredoc(t_ast *cmd)
 	return (0);
 }
 
-static int	apply_infile(char *infile)
+int	apply_all_infiles(char **infiles)
 {
 	int	fd;
+	int	i;
 
-	if (!infile)
+	if (!infiles)
 		return (0);
-	fd = open_infile(infile);
-	if (fd < 0)
-		return (1);
-	if (dup2(fd, STDIN_FILENO) < 0)
+	i = 0;
+	while (infiles[i])
 	{
-		print_cmd_error(infile, strerror(errno));
+		fd = open_infile(infiles[i]);
+		if (fd < 0)
+			return (1);
+		if (dup2(fd, STDIN_FILENO) < 0)
+		{
+			print_cmd_error(infiles[i], strerror(errno));
+			close(fd);
+			return (1);
+		}
 		close(fd);
-		return (1);
+		i++;
 	}
-	close(fd);
 	return (0);
 }
 
-static int	apply_outfile(char *outfile, int append)
+int	apply_all_outfiles(char **outfiles, int *out_append)
 {
 	int	fd;
+	int	i;
+	int	append;
 
-	if (!outfile)
+	if (!outfiles)
 		return (0);
-	fd = open_outfile(outfile, append);
-	if (fd < 0)
-		return (1);
-	if (dup2(fd, STDOUT_FILENO) < 0)
+	i = 0;
+	while (outfiles[i])
 	{
-		print_cmd_error(outfile, strerror(errno));
+		append = 0;
+		if (out_append)
+			append = out_append[i];
+		fd = open_outfile(outfiles[i], append);
+		if (fd < 0)
+			return (1);
+		if (dup2(fd, STDOUT_FILENO) < 0)
+		{
+			print_cmd_error(outfiles[i], strerror(errno));
+			close(fd);
+			return (1);
+		}
 		close(fd);
-		return (1);
+		i++;
 	}
-	close(fd);
 	return (0);
 }
 
 int	apply_redirection(t_ast *cmd)
 {
-	char	*infile;
-	char	*outfile;
-
 	if (!cmd)
 		return (0);
-	infile = get_last_file(cmd->infile);
-	outfile = get_last_file(cmd->outfile);
 	if (apply_heredoc(cmd) != 0)
 		return (1);
-	if (!cmd->heredoc && apply_infile(infile) != 0)
+	if (!cmd->heredoc && apply_all_infiles(cmd->infile) != 0)
 		return (1);
-	if (apply_outfile(outfile, cmd->append) != 0)
+	if (apply_all_outfiles(cmd->outfile, cmd->out_append) != 0)
 		return (1);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
+/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 10:43:05 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/31 15:33:57 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/02/01 13:28:30 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
-// TODO: remove
 # include <stdio.h>
 # include "libft.h"
 # include <errno.h>
@@ -44,6 +43,7 @@ typedef struct s_ast
 	int				heredoc; // 1 if heredoc was present
 	char			*heredoc_tmp;
 	int				heredoc_fd;
+	int				*out_append;
 }	t_ast;
 
 typedef struct s_env

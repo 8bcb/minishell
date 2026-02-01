@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
+/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 15:49:19 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/31 15:00:58 by pkosciel         ###   ########.fr       */
+/*   Updated: 2026/02/01 13:41:59 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,34 @@ int	update_argv(char *str, t_ast **node)
 	return (1);
 }
 
+static int	init_redir_arrays(char ***files, int **modes)
+{
+	if (*files == NULL)
+		*files = calloc(10, sizeof(char *));
+	if (*modes == NULL)
+		*modes = calloc(10, sizeof(int));
+	if (!*files || !*modes)
+		return (-1);
+	return (0);
+}
+
+int	update_redir_list_with_mode(char ***files, int **modes,
+		char **file, int append)
+{
+	int	i;
+
+	if (init_redir_arrays(files, modes) != 0)
+		return (-1);
+	i = 0;
+	while ((*files)[i])
+		i++;
+	if (i > 8)
+		return (_too_many_args_error());
+	(*files)[i] = *file;
+	(*modes)[i] = append;
+	return (1);
+}
+
 int	update_redir_list(char ***list, char **str)
 {
 	int	i;
@@ -46,7 +74,7 @@ int	update_redir_list(char ***list, char **str)
 	return (1);
 }
 
-int	assign_redir_values(t_ast **node, char	**file, t_token_type type)
+int	assign_redir_values(t_ast **node, char **file, t_token_type type)
 {
 	int	rez;
 
@@ -60,9 +88,9 @@ int	assign_redir_values(t_ast **node, char	**file, t_token_type type)
 	}
 	else
 	{
-		rez = update_redir_list(&((*node)->outfile), file);
-		if (type == REDIR_APPEND)
-			(*node)->append = 1;
+		rez = update_redir_list_with_mode(&((*node)->outfile),
+				&((*node)->out_append), file,
+				(type == REDIR_APPEND));
 	}
 	return (rez);
 }

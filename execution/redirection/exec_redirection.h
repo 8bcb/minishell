@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirection.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
+/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 08:15:26 by asia              #+#    #+#             */
-/*   Updated: 2026/01/18 13:13:21 by jziola           ###   ########.fr       */
+/*   Created: 2026/02/01 13:40:42 by asia              #+#    #+#             */
+/*   Updated: 2026/02/01 13:40:43 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ int		open_heredoc_fd(const char *delimiter);
 int		open_outfile(char *outfile, int append);
 int		open_infile(char *infile);
 int		preprocess_heredocs(t_ast *node);
+int		apply_all_infiles(char **infiles);
+int		apply_all_outfiles(char **outfiles, int *out_append);
 
 #endif

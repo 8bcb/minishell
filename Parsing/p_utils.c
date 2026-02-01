@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
+/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 15:35:19 by pkosciel          #+#    #+#             */
-/*   Updated: 2026/01/31 11:43:48 by jziola           ###   ########.fr       */
+/*   Updated: 2026/02/01 13:28:52 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	free_tree(t_ast **tree)
 	free_str_arr((*tree)->argv);
 	free_str_arr((*tree)->infile);
 	free_str_arr((*tree)->outfile);
+	free((*tree)->out_append);
 	if (node->heredoc_tmp)
 		free(node->heredoc_tmp);
 	free(node);
