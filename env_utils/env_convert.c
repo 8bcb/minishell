@@ -3,22 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_convert.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/17 16:45:10 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/17 16:46:15 by jziola           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   env_convert.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/02 08:38:42 by asia              #+#    #+#             */
-/*   Updated: 2025/12/02 08:53:42 by asia             ###   ########.fr       */
+/*   Created: 2026/01/17 16:45:10 by jziola            #+#    #+#             */
+/*   Updated: 2026/02/01 13:19:24 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +22,7 @@ static int	count_env_vars(t_env *env)
 	cur = env;
 	while (cur)
 	{
-		if (cur->key)
+		if (is_exportable_key(cur->key))
 			count++;
 		cur = cur->next;
 	}
@@ -69,7 +57,7 @@ static void	fill_envp_array(t_env *env, char **envp)
 	i = 0;
 	while (cur)
 	{
-		if (!cur->key)
+		if (!is_exportable_key(cur->key))
 		{
 			cur = cur->next;
 			continue ;

@@ -3,22 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkosciel <pkosciel@student.42Warsaw.pl>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/17 16:43:39 by jziola            #+#    #+#             */
-/*   Updated: 2026/01/31 15:09:41 by pkosciel         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   env_utils.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
 /*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/02 08:28:27 by asia              #+#    #+#             */
-/*   Updated: 2025/12/02 08:29:23 by asia             ###   ########.fr       */
+/*   Created: 2026/01/17 16:43:39 by jziola            #+#    #+#             */
+/*   Updated: 2026/02/01 13:18:46 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +45,6 @@ char	*get_env_key(t_env_expand *ex);
 int		expand_last_status(t_env_expand *ex);
 int		expand(t_env_expand *ex);
 char	*expand_variables(char *rl, t_env *env);
+int		is_exportable_key(const char *key);
 
 #endif

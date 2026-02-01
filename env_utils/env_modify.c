@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_modify.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jziola <jziola@student.42.fr>              +#+  +:+       +#+        */
+/*   By: asia <asia@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 08:38:42 by asia              #+#    #+#             */
-/*   Updated: 2026/01/17 16:50:33 by jziola           ###   ########.fr       */
+/*   Updated: 2026/02/01 13:18:51 by asia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,13 @@ int	env_unset(t_env **env, const char *key)
 		cur = cur->next;
 	}
 	return (0);
+}
+
+int	is_exportable_key(const char *key)
+{
+	if (!key)
+		return (0);
+	if (key[0] == '?' && key[1] == '\0')
+		return (0);
+	return (1);
 }
